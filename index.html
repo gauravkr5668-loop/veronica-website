@@ -847,7 +847,7 @@
             <label>Anything else?</label>
             <textarea placeholder="Your service area, questions, or anything else..."></textarea>
           </div>
-          <button class="form-submit" onclick="handleSubmit(event)">Send message</button>
+          <form action="https://formspree.io/f/xojzenvq" method="POST" id="veronica-form"><input type="hidden" name="name" id="f-name"/><input type="hidden" name="business" id="f-business"/><input type="hidden" name="email" id="f-email"/><input type="hidden" name="phone" id="f-phone"/><input type="hidden" name="plan" id="f-plan"/><input type="hidden" name="message" id="f-message"/><button class="form-submit" onclick="handleFormspree(event)">Send message</button></form>
         </div>
       </div>
     </div>
@@ -907,8 +907,8 @@
     });
 
     // Form
-    function handleSubmit(e) {
-      const btn = e.target;
+    function handleFormspree(e) {
+      e.preventDefault(); const btn = document.querySelector(".form-submit"); const form = document.getElementById("veronica-form"); document.getElementById("f-name").value = document.querySelectorAll("input")[0].value; document.getElementById("f-business").value = document.querySelectorAll("input")[1].value; document.getElementById("f-email").value = document.querySelectorAll("input")[2].value; document.getElementById("f-phone").value = document.querySelectorAll("input")[3].value; document.getElementById("f-plan").value = document.querySelector("select").value; document.getElementById("f-message").value = document.querySelector("textarea").value; fetch(form.action, {method:"POST", body: new FormData(form), headers:{Accept:"application/json"}}).then(r=>{ if(r.ok){btn.textContent="Message sent ✓"; btn.style.background="#3b3830"; btn.disabled=true;} else{btn.textContent="Try again";} }); const btn2 = e.target;
       btn.textContent = 'Message sent';
       btn.style.background = '#3b3830';
       btn.disabled = true;
