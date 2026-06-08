@@ -93,7 +93,7 @@
     }
     .hero h1 em { font-style: italic; color: var(--ink-soft); }
     .hero-body {
-      font-size: 1rem; color: var(--ink-soft);
+      font-size: 1rem; color: var(--ink-mid);
       line-height: 1.85; font-weight: 300;
       max-width: 420px;
       animation: fadeUp 1s 0.15s ease both;
@@ -107,6 +107,7 @@
       background: var(--ink); color: var(--white);
       border: 1px solid var(--ink);
       padding: 18px 32px;
+      min-height: 48px;
       font-family: 'Outfit', sans-serif;
       font-size: 0.78rem; font-weight: 400; letter-spacing: 0.16em;
       text-transform: uppercase; text-decoration: none;
@@ -161,7 +162,7 @@
       background: var(--white);
     }
     .msg.veronica .msg-text {
-      background: var(--ink); color: rgba(255,255,255,0.82);
+      background: var(--ink); color: rgba(255,255,255,0.95);
     }
     .msg.veronica .msg-who { color: rgba(255,255,255,0.2); }
     .card-footer {
@@ -185,7 +186,7 @@
       display: inline-flex; align-items: center; gap: 32px;
       padding: 0 32px;
       font-size: 0.65rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; color: rgba(255,255,255,0.65);
     }
     .ticker-item::after { content: '·'; color: rgba(255,255,255,0.15); }
     @keyframes ticker {
@@ -209,7 +210,7 @@
     }
     .section-title em { font-style: italic; color: var(--ink-soft); }
     .section-body {
-      font-size: 0.95rem; color: var(--ink-soft);
+      font-size: 0.95rem; color: var(--ink-mid);
       font-weight: 300; line-height: 1.85;
     }
 
@@ -237,10 +238,45 @@
       transition: color 0.3s;
     }
     .stat-desc {
-      font-size: 0.82rem; color: var(--ink-soft);
+      font-size: 0.82rem; color: var(--ink-mid);
       font-weight: 300; line-height: 1.5;
       transition: color 0.3s;
     }
+
+    /* ── FEATURES COMPARISON ── */
+    .features-section { background: var(--cream); }
+    .feat-tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+    .feat-tab {
+      padding: 8px 20px; border-radius: 999px; border: 1.5px solid var(--stone);
+      font-size: 0.82rem; font-weight: 500; cursor: pointer; background: transparent;
+      color: var(--ink-soft); transition: all 0.2s;
+    }
+    .feat-tab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .feat-panel { display: none; }
+    .feat-panel.active { display: block; }
+    .feat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.9rem;
+    }
+    .feat-row:last-child { border-bottom: none; }
+    .feat-row-label { color: var(--ink); font-weight: 400; flex: 1; }
+    .feat-row-val { font-weight: 500; color: var(--ink-soft); font-size: 0.85rem; }
+    .feat-yes { color: #2d6a4f; font-weight: 600; }
+    .feat-no { color: var(--stone); }
+    .feat-price-tag {
+      display: inline-block; margin-top: 24px; padding: 10px 24px;
+      background: var(--ink); color: var(--white); border-radius: 999px;
+      font-size: 0.85rem; font-weight: 500;
+    }
+
+    /* ── MOBILE FIRST GLOBAL ── */
+    * { box-sizing: border-box; }
+    body { -webkit-text-size-adjust: 100%; }
+    .section { padding: 64px 20px; }
+    .hero { padding: 80px 20px 60px; }
+    .nav-inner { padding: 0 20px; }
+    img, video { max-width: 100%; }
 
     /* ── HOW IT WORKS ── */
     .how { background: var(--white); }
@@ -268,7 +304,7 @@
       font-size: 1.35rem; font-weight: 400;
       color: var(--ink); margin-bottom: 12px; line-height: 1.25;
     }
-    .step p { font-size: 0.88rem; color: var(--ink-soft); font-weight: 300; line-height: 1.8; }
+    .step p { font-size: 0.88rem; color: var(--ink-mid); font-weight: 300; line-height: 1.8; }
 
     /* ── PRICING ── */
     .pricing { background: var(--cream); }
@@ -283,7 +319,7 @@
       padding: 40px 32px;
       border: 1px solid var(--stone);
     }
-    .plan.featured { background: var(--ink); border-color: var(--ink); }
+    .plan.featured { background: var(--ink); border-color: var(--ink); box-shadow: 0 8px 40px rgba(17,16,8,0.18); transform: translateY(-4px); }
 
     .plan-eyebrow {
       font-size: 0.62rem; letter-spacing: 0.2em;
@@ -310,7 +346,7 @@
     }
     .plan.featured .plan-name { color: var(--white); }
     .plan-tagline {
-      font-size: 0.83rem; color: var(--ink-soft); font-weight: 300;
+      font-size: 0.83rem; color: var(--ink-mid); font-weight: 300;
       margin-bottom: 32px;
     }
     .plan.featured .plan-tagline { color: rgba(255,255,255,0.4); }
@@ -340,7 +376,7 @@
     }
     .plan-features li {
       display: flex; align-items: flex-start; gap: 12px;
-      font-size: 0.87rem; color: var(--ink-soft); font-weight: 300;
+      font-size: 0.87rem; color: var(--ink-mid); font-weight: 300;
     }
     .plan.featured .plan-features li { color: rgba(255,255,255,0.55); }
     .feat-check {
@@ -354,6 +390,7 @@
       display: block; width: 100%; text-align: center;
       border: 1px solid var(--ink); color: var(--ink);
       padding: 16px;
+      min-height: 48px;
       font-family: 'Outfit', sans-serif;
       font-size: 0.72rem; font-weight: 400; letter-spacing: 0.16em;
       text-transform: uppercase; text-decoration: none;
@@ -396,7 +433,7 @@
       background: var(--ink); border-color: var(--ink); color: var(--white);
     }
     .faq-a {
-      font-size: 0.92rem; color: var(--ink-soft);
+      font-size: 0.92rem; color: var(--ink-mid);
       font-weight: 300; line-height: 1.85;
       max-height: 0; overflow: hidden;
       transition: max-height 0.45s ease, padding 0.35s;
@@ -415,7 +452,7 @@
       border: 1px solid var(--stone);
       display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
     }
-    .ci-text { font-size: 0.85rem; color: var(--ink-soft); font-weight: 300; }
+    .ci-text { font-size: 0.85rem; color: var(--ink-mid); font-weight: 300; }
 
     .contact-form { display: flex; flex-direction: column; }
     .form-field {
@@ -534,7 +571,7 @@
       .sample-card { max-width: 100%; }
       .section { padding: 100px 48px; }
       .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
-      .pricing-grid { flex-direction: row; }
+      .pricing-grid { flex-direction: row; gap: 16px; }
       .plan { flex: 1; }
       .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
       .contact-grid {
@@ -561,6 +598,7 @@
     <div class="nav-logo">Veronica</div>
     <ul class="nav-links">
       <li><a href="#how">Process</a></li>
+      <li><a href="#features">Features</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -681,7 +719,7 @@
       </div>
       <div class="step reveal">
         <span class="step-num">02</span>
-        <div class="step-icon-wrap">◈</div>
+        <div class="step-icon-wrap">🔧</div>
         <h3>We build your Veronica</h3>
         <p>We configure a bespoke AI receptionist trained on your business — the right name, tone, services, and local knowledge.</p>
       </div>
@@ -694,6 +732,65 @@
     </div>
   </section>
 
+  <!-- FEATURES COMPARISON -->
+  <section class="section features-section" id="features">
+    <div class="section-label reveal">What you get</div>
+    <h2 class="section-title reveal">Pick your plan.<br/><em>See exactly what's included.</em></h2>
+    <p class="section-body reveal" style="margin-bottom:32px;max-width:420px;">No hidden extras. No vague promises. Here's exactly what each plan does for your business.</p>
+
+    <div class="feat-tabs reveal">
+      <button class="feat-tab active" onclick="switchPlan('essential', this)">Essential</button>
+      <button class="feat-tab" onclick="switchPlan('professional', this)">Professional</button>
+      <button class="feat-tab" onclick="switchPlan('complete', this)">Complete</button>
+    </div>
+
+    <!-- ESSENTIAL -->
+    <div class="feat-panel active" id="panel-essential">
+      <div class="feat-row"><span class="feat-row-label">24/7 AI receptionist</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Answers in your business name</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Captures caller name, suburb & job</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Real-time Google Sheets logging</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Dedicated local phone number</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Custom script for your services</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Live in 24 hours</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">WhatsApp alert per new lead</span><span class="feat-row-val feat-no">— Not included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Google Calendar booking</span><span class="feat-row-val feat-no">— Not included</span></div>
+      <a href="#contact" class="feat-price-tag">$149/month + $299 setup →</a>
+    </div>
+
+    <!-- PROFESSIONAL -->
+    <div class="feat-panel" id="panel-professional">
+      <div class="feat-row"><span class="feat-row-label">24/7 AI receptionist</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Answers in your business name</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Captures caller name, suburb & job</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Real-time Google Sheets logging</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Dedicated local phone number</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Custom script for your services</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Live in 24 hours</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">WhatsApp alert per new lead</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Direct WhatsApp support line</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Google Calendar booking</span><span class="feat-row-val feat-no">— Not included</span></div>
+      <a href="#contact" class="feat-price-tag">$199/month + $399 setup →</a>
+    </div>
+
+    <!-- COMPLETE -->
+    <div class="feat-panel" id="panel-complete">
+      <div class="feat-row"><span class="feat-row-label">24/7 AI receptionist</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Answers in your business name</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Captures caller name, suburb & job</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Real-time Google Sheets logging</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Dedicated local phone number</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Custom script for your services</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Live in 24 hours</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">WhatsApp alert per new lead</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Direct WhatsApp support line</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">Google Calendar booking</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">No double bookings, no callbacks</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <div class="feat-row"><span class="feat-row-label">First access to new features</span><span class="feat-row-val feat-yes">✓ Included</span></div>
+      <a href="#contact" class="feat-price-tag">$249/month + $499 setup →</a>
+    </div>
+  </section>
+
   <!-- PRICING -->
   <section class="section pricing" id="pricing">
     <div class="section-label reveal">Investment</div>
@@ -701,38 +798,15 @@
     <p class="section-body pricing-sub reveal">We're confident Veronica delivers value every month. No contracts means she has to earn her place — and she does.</p>
     <div class="pricing-grid">
 
-      <!-- FOUNDING — LEFT / FIRST -->
-      <div class="plan featured reveal">
-        <p class="plan-eyebrow">Founding Member <span class="plan-eyebrow-line"></span></p>
-        <div class="plan-badge">⟡ 3 spots remaining</div>
-        <p class="plan-name">Founding Member</p>
-        <p class="plan-tagline">Lock in your rate permanently. First movers only.</p>
+      <!-- ESSENTIAL -->
+      <div class="plan reveal">
+        <p class="plan-eyebrow">Essential <span class="plan-eyebrow-line"></span></p>
+        <div class="plan-badge" style="visibility:hidden;height:0;margin:0;padding:0;overflow:hidden">x</div>
+        <p class="plan-tagline">Stop missing calls. Start capturing every lead.</p>
         <div class="plan-pricing-block">
           <div class="plan-amount"><sup>$</sup>149</div>
-          <p class="plan-cadence">AUD per month — locked forever</p>
-          <p class="plan-setup-note">+ $299 one-time setup · save $300</p>
-        </div>
-        <ul class="plan-features">
-          <li><span class="feat-check">✓</span>Everything in Standard</li>
-          <li><span class="feat-check">✓</span>50% reduced rate, locked permanently</li>
-          <li><span class="feat-check">✓</span>Priority onboarding — live in 24 hours</li>
-          <li><span class="feat-check">✓</span>Direct WhatsApp support line</li>
-          <li><span class="feat-check">✓</span>First access to all new features</li>
-          <li><span class="feat-check">✓</span>SMS lead notifications (coming soon)</li>
-        </ul>
-        <a href="#contact" class="btn-plan-solid">Claim a founding spot</a>
-      </div>
-
-      <!-- STANDARD — RIGHT / SECOND -->
-      <div class="plan reveal">
-        <p class="plan-eyebrow">Standard <span class="plan-eyebrow-line"></span></p>
-        <div class="plan-badge" style="visibility:hidden">placeholder</div>
-        <p class="plan-name">Standard</p>
-        <p class="plan-tagline">For businesses ready to stop missing calls</p>
-        <div class="plan-pricing-block">
-          <div class="plan-amount"><sup>$</sup>299</div>
           <p class="plan-cadence">AUD per month</p>
-          <p class="plan-setup-note">+ $599 one-time setup</p>
+          <p class="plan-setup-note">+ $299 one-time setup</p>
         </div>
         <ul class="plan-features">
           <li><span class="feat-check">✓</span>24/7 AI receptionist, your branding</li>
@@ -740,6 +814,48 @@
           <li><span class="feat-check">✓</span>Dedicated local phone number</li>
           <li><span class="feat-check">✓</span>Custom script for your services</li>
           <li><span class="feat-check">✓</span>Email support</li>
+          <li><span class="feat-check">✓</span>Live in 24 hours</li>
+        </ul>
+        <a href="#contact" class="btn-plan-outline">Get started</a>
+      </div>
+
+      <!-- PROFESSIONAL -->
+      <div class="plan featured reveal">
+        <p class="plan-eyebrow">Most Popular <span class="plan-eyebrow-line"></span></p>
+        <div class="plan-badge">⟡ Best value</div>
+        <p class="plan-name">Professional</p>
+        <p class="plan-tagline">Every lead captured. You get notified instantly.</p>
+        <div class="plan-pricing-block">
+          <div class="plan-amount"><sup>$</sup>199</div>
+          <p class="plan-cadence">AUD per month</p>
+          <p class="plan-setup-note">+ $399 one-time setup</p>
+        </div>
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span>Everything in Essential</li>
+          <li><span class="feat-check">✓</span>WhatsApp alert when a lead comes in</li>
+          <li><span class="feat-check">✓</span>Lead details sent straight to your phone</li>
+          <li><span class="feat-check">✓</span>Priority onboarding — live in 24 hours</li>
+          <li><span class="feat-check">✓</span>Direct WhatsApp support line</li>
+        </ul>
+        <a href="#contact" class="btn-plan-solid">Get started</a>
+      </div>
+
+      <!-- COMPLETE -->
+      <div class="plan reveal">
+        <p class="plan-eyebrow">Complete <span class="plan-eyebrow-line"></span></p>
+        <div class="plan-badge" style="visibility:hidden;height:0;margin:0;padding:0;overflow:hidden">x</div>
+        <p class="plan-name">Complete</p>
+        <p class="plan-tagline">Veronica answers, notifies, and books the job.</p>
+        <div class="plan-pricing-block">
+          <div class="plan-amount"><sup>$</sup>249</div>
+          <p class="plan-cadence">AUD per month</p>
+          <p class="plan-setup-note">+ $499 one-time setup</p>
+        </div>
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span>Everything in Professional</li>
+          <li><span class="feat-check">✓</span>Google Calendar booking — Veronica books jobs automatically</li>
+          <li><span class="feat-check">✓</span>No double bookings, no callbacks needed</li>
+          <li><span class="feat-check">✓</span>First access to all new features</li>
         </ul>
         <a href="#contact" class="btn-plan-outline">Get started</a>
       </div>
@@ -764,7 +880,7 @@
           What happens after she takes a call?
           <span class="faq-arrow">+</span>
         </button>
-        <div class="faq-a">Veronica greets the caller using your business name, collects their name, location, and what they need — then logs it directly into your Google Sheet in real time. No voicemails. No lost notes. Every lead, accounted for.</div>
+        <div class="faq-a">Veronica greets the caller using your business name, collects their name, location, and what they need — then logs it directly into your Google Sheet in real time. On the Professional plan, you get a WhatsApp alert the second the call ends. On the Complete plan, she also books the job straight into your Google Calendar — no callbacks needed. No voicemails. No lost notes. Every lead accounted for.</div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q" onclick="toggleFAQ(this)">
@@ -839,8 +955,9 @@
             <label>Which plan interests you?</label>
             <select>
               <option value="">Select...</option>
-              <option>Founding Member — $149/month (limited)</option>
-              <option>Standard — $299/month</option>
+              <option>Essential — $149/month</option>
+              <option>Professional — $199/month</option>
+              <option>Complete — $249/month</option>
               <option>Just want to see a demo first</option>
             </select>
           </div>
@@ -908,6 +1025,13 @@
     });
 
     
+    function switchPlan(plan, btn) {
+      document.querySelectorAll('.feat-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.feat-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + plan).classList.add('active');
+    }
+
     function handleFormspree(e) {
       e.preventDefault();
       var btn = document.querySelector('.form-submit');
