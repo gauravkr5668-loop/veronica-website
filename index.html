@@ -1065,7 +1065,9 @@ var apiKey = "427dc07e-55be-450c-9d08-de52f47d98d5";
     vapiInstance = window.vapiSDK.run({
       apiKey: apiKey,
       assistant: assistant,
-      config: {},
+      config: {
+        hideButton: true,
+      },
     });
   };
 })(document, "script");
