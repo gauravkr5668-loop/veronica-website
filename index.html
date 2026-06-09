@@ -603,7 +603,7 @@
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#" onclick="if(vapiInstance)vapiInstance.start("8cebdd26-3879-4b05-8f8d-e9367a7fa9df");return false;" class="nav-cta">Speak to Veronica</a>
+    <a href="#" onclick="if(vapiInstance)vapiInstance.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');return false;" class="nav-cta">Speak to Veronica</a>
   </nav>
 
   <!-- HERO -->
@@ -616,7 +616,7 @@
       <h1>Never miss<br/>a call.<br/><em>Ever again.</em></h1>
       <p class="hero-body">Veronica answers every call, 24 hours a day. She captures the lead, logs the details, and delivers them to you instantly — so you never lose another job to a missed call.</p>
       <div class="hero-actions">
-        <a href="#" onclick="if(vapiInstance)vapiInstance.start("8cebdd26-3879-4b05-8f8d-e9367a7fa9df");return false;" class="btn-dark">Call Veronica now</a>
+        <a href="#" onclick="if(vapiInstance)vapiInstance.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');return false;" class="btn-dark">Call Veronica now</a>
         <a href="#how" class="btn-text">See how it works</a>
       </div>
     </div>
@@ -1044,19 +1044,12 @@
   </script>
 <script>
 var vapiInstance = null;
-var assistant = "8cebdd26-3879-4b05-8f8d-e9367a7fa9df";
-var apiKey = "427dc07e-55be-450c-9d08-de52f47d98d5";
-(function (d, t) {
-  var g = document.createElement(t);
-  var s = d.getElementsByTagName(t)[0];
-  g.src = "https://unpkg.com/@vapi-ai/web/dist/vapi-web.js";
-  g.defer = true;
-  g.async = true;
-  s.parentNode.insertBefore(g, s);
-  g.onload = function () {
-    vapiInstance = new window.Vapi(apiKey);
-  };
-})(document, "script");
+var vapiScript = document.createElement('script');
+vapiScript.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi-web.js';
+vapiScript.onload = function() {
+  vapiInstance = new window.Vapi('427dc07e-55be-450c-9d08-de52f47d98d5');
+};
+document.head.appendChild(vapiScript);
 </script>
 </body>
 </html>
