@@ -1042,18 +1042,13 @@
       });
     }
   </script>
-<script>
-var vapiInstance = null;
-var vapiScript = document.createElement('script');
-vapiScript.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.1.1/dist/vapi-web.umd.js';
-vapiScript.onload = function() {
-  vapiInstance = new window.Vapi('427dc07e-55be-450c-9d08-de52f47d98d5');
-  console.log('Vapi loaded:', vapiInstance);
-};
-vapiScript.onerror = function() {
-  console.log('Vapi script failed to load');
-};
-document.head.appendChild(vapiScript);
+<script type="module">
+import Vapi from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi-web.es.js';
+const vapi = new Vapi('427dc07e-55be-450c-9d08-de52f47d98d5');
+window.vapiInstance = vapi;
+vapi.on('call-start', () => console.log('Call started'));
+vapi.on('error', (e) => console.error('Vapi error:', e));
+console.log('Vapi ready');
 </script>
 </body>
 </html>
