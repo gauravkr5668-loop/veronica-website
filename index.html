@@ -1049,5 +1049,26 @@
       });
     }
   </script>
+<script>
+var vapiInstance = null;
+const assistant = "8cebdd26-3879-4b05-8f8d-e9367a7fa9df";
+const apiKey = "427dc07e-55be-450c-9d08-de52f47d98d5";
+const buttonConfig = {};
+(function (d, t) {
+  var g = document.createElement(t),
+    s = d.getElementsByTagName(t)[0];
+  g.src = "https://cdn.vapi.ai/web/dist/vapi-web.js";
+  g.defer = true;
+  g.async = true;
+  s.parentNode.insertBefore(g, s);
+  g.onload = function () {
+    vapiInstance = window.vapiSDK.run({
+      apiKey: apiKey,
+      assistant: assistant,
+      config: buttonConfig,
+    });
+  };
+})(document, "script");
+</script>
 </body>
 </html>
