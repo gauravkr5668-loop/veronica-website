@@ -1045,9 +1045,13 @@
 <script>
 var vapiInstance = null;
 var vapiScript = document.createElement('script');
-vapiScript.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi-web.js';
+vapiScript.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.1.1/dist/vapi-web.umd.js';
 vapiScript.onload = function() {
   vapiInstance = new window.Vapi('427dc07e-55be-450c-9d08-de52f47d98d5');
+  console.log('Vapi loaded:', vapiInstance);
+};
+vapiScript.onerror = function() {
+  console.log('Vapi script failed to load');
 };
 document.head.appendChild(vapiScript);
 </script>
