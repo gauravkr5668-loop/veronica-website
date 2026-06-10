@@ -8,9 +8,9 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--cream:#f5f0e8;--stone:#d6cfc3;--ink:#111008;--ink-mid:#3b3830;--ink-soft:#7a7469;--ink-faint:#b0a99e;--white:#fdfcfa}
-html,body{height:100%;background:var(--ink);color:var(--white);font-family:'Outfit',sans-serif;overflow:hidden}
+html,body{height:100%;background:var(--white);color:var(--ink);font-family:'Outfit',sans-serif;overflow:hidden}
 .page{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.glow{position:fixed;width:600px;height:600px;background:radial-gradient(circle,rgba(245,240,232,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.glow{position:fixed;width:600px;height:600px;background:radial-gradient(circle,rgba(17,16,8,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center}
 .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:2rem}
 .eyebrow-line{width:28px;height:1px;background:var(--ink-soft)}
@@ -19,10 +19,10 @@ html,body{height:100%;background:var(--ink);color:var(--white);font-family:'Outf
 h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:1.25rem}
 h1 em{font-style:italic;color:var(--ink-faint)}
 .subtitle{font-size:0.95rem;color:var(--ink-soft);font-weight:300;margin-bottom:3.5rem;letter-spacing:0.02em}
-.call-btn{display:inline-flex;align-items:center;gap:14px;background:var(--white);color:var(--ink);border:none;padding:18px 44px;font-size:0.9rem;font-weight:500;font-family:'Outfit',sans-serif;letter-spacing:0.05em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:transform 0.2s ease}
+.call-btn{display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:var(--white);border:none;padding:18px 44px;font-size:0.9rem;font-weight:500;font-family:'Outfit',sans-serif;letter-spacing:0.05em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:transform 0.2s ease}
 .call-btn:hover{transform:scale(1.03)}
 .call-btn:active{transform:scale(0.97)}
-.call-btn.active{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.2)}
+.call-btn.active{background:transparent;color:var(--ink);border:1px solid rgba(0,0,0,0.2)}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulse 2s infinite;display:none}
 .call-btn.active .live-dot{display:block}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
