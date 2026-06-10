@@ -50,18 +50,22 @@ h1 em{font-style:italic;color:var(--ink-faint)}
 </div>
 <script>
 var vapi=null,callActive=false;
-var s=document.createElement('script');
-s.src='https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.1.1/dist/vapi-web.umd.cjs';
-s.onload=function(){
-try{
-vapi=new window.Vapi('427dc07e-55be-450c-9d08-de52f47d98d5');
+(function(d,t){
+var g=document.createElement(t),s=d.getElementsByTagName(t)[0];
+g.src='https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
+g.defer=true;g.async=true;
+s.parentNode.insertBefore(g,s);
+g.onload=function(){
+vapi=window.vapiSDK.run({
+apiKey:'427dc07e-55be-450c-9d08-de52f47d98d5',
+assistant:'8cebdd26-3879-4b05-8f8d-e9367a7fa9df',
+config:{hideButton:true}
+});
 vapi.on('call-start',function(){callActive=true;document.getElementById('callBtn').classList.add('active');document.getElementById('btnText').textContent='End Call';document.getElementById('status').textContent='Connected — Veronica is live';});
 vapi.on('call-end',function(){callActive=false;document.getElementById('callBtn').classList.remove('active');document.getElementById('btnText').textContent='Call Veronica Now';document.getElementById('status').textContent='Call ended';setTimeout(function(){document.getElementById('status').textContent='';},3000);});
 vapi.on('error',function(){document.getElementById('status').textContent='Something went wrong — try again';document.getElementById('callBtn').classList.remove('active');document.getElementById('btnText').textContent='Call Veronica Now';callActive=false;});
-}catch(e){document.getElementById('status').textContent='Failed to initialise';}
 };
-s.onerror=function(){document.getElementById('status').textContent='Connection error — refresh and try again';};
-document.head.appendChild(s);
+})(document,'script');
 function handleCall(){if(!vapi){document.getElementById('status').textContent='Loading — try again in a moment';return;}if(callActive){vapi.stop();}else{document.getElementById('status').textContent='Connecting...';vapi.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');}}
 </script>
 </body>
