@@ -4,35 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veronica — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--cream:#f5f0e8;--stone:#d6cfc3;--ink:#111008;--ink-mid:#3b3830;--ink-soft:#7a7469;--ink-faint:#b0a99e;--white:#fdfcfa}
-html,body{height:100%;background:var(--white);color:var(--ink);font-family:'Outfit',sans-serif;overflow:hidden}
+:root{--cream:#f5f0e8;--parchment:#ede7d9;--stone:#d6cfc3;--ink:#111008;--ink-mid:#3b3830;--ink-soft:#7a7469;--ink-faint:#b0a99e;--white:#fdfcfa}
+html,body{height:100%;background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif;overflow:hidden}
 .page{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.glow{position:fixed;width:600px;height:600px;background:radial-gradient(circle,rgba(17,16,8,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center}
+.page::after{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--stone),transparent)}
+.content{display:flex;flex-direction:column;align-items:center;text-align:center}
 .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:2rem}
-.eyebrow-line{width:28px;height:1px;background:var(--ink-soft)}
-.eyebrow span{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-soft)}
-.logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;letter-spacing:0.25em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:2.5rem}
-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:1.25rem}
-h1 em{font-style:italic;color:var(--ink-faint)}
-.subtitle{font-size:0.95rem;color:var(--ink-soft);font-weight:300;margin-bottom:3.5rem;letter-spacing:0.02em}
-.call-btn{display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:var(--white);border:none;padding:18px 44px;font-size:0.9rem;font-weight:500;font-family:'Outfit',sans-serif;letter-spacing:0.05em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:transform 0.2s ease}
+.eyebrow-line{width:28px;height:1px;background:var(--stone)}
+.eyebrow span{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:400}
+.logo{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:300;letter-spacing:0.3em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2.5rem}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,8vw,5.5rem);font-weight:300;line-height:1.05;color:var(--ink);margin-bottom:1.25rem}
+h1 em{font-style:italic;color:var(--ink-soft)}
+.subtitle{font-size:0.95rem;color:var(--ink-mid);font-weight:300;margin-bottom:3.5rem;letter-spacing:0.02em}
+.call-btn{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--white);border:1px solid var(--ink);padding:18px 48px;font-size:0.85rem;font-weight:500;font-family:'Outfit',sans-serif;letter-spacing:0.08em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:transform 0.2s ease,background 0.2s ease;outline:none}
 .call-btn:hover{transform:scale(1.03)}
 .call-btn:active{transform:scale(0.97)}
-.call-btn.active{background:transparent;color:var(--ink);border:1px solid rgba(0,0,0,0.2)}
-.live-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulse 2s infinite;display:none}
+.call-btn.active{background:transparent;color:var(--ink);border:1px solid var(--stone)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulse 2s infinite;display:none}
 .call-btn.active .live-dot{display:block}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-.status{margin-top:1.75rem;font-size:0.8rem;color:var(--ink-soft);letter-spacing:0.08em;text-transform:uppercase;min-height:1.2em}
-.divider{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--ink-soft),transparent);margin:3rem auto 0}
-.footer-note{margin-top:1.5rem;font-size:0.72rem;color:var(--ink-soft);letter-spacing:0.1em;text-transform:uppercase}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+.status{margin-top:1.75rem;font-size:0.75rem;color:var(--ink-soft);letter-spacing:0.1em;text-transform:uppercase;min-height:1.2em}
+.divider{width:1px;height:56px;background:linear-gradient(to bottom,transparent,var(--stone),transparent);margin:3rem auto 0}
+.footer-note{margin-top:1.5rem;font-size:0.68rem;color:var(--ink-faint);letter-spacing:0.12em;text-transform:uppercase}
 </style>
 </head>
 <body>
-<div class="glow"></div>
 <div class="page">
 <div class="content">
 <div class="eyebrow"><div class="eyebrow-line"></div><span>Live Demo · AI Receptionist</span><div class="eyebrow-line"></div></div>
@@ -53,18 +54,14 @@ var vapi=null,callActive=false;
 (function(d,t){
 var g=document.createElement(t),s=d.getElementsByTagName(t)[0];
 g.src='https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
-g.defer=true;g.async=true;
-s.parentNode.insertBefore(g,s);
+g.defer=true;g.async=true;s.parentNode.insertBefore(g,s);
 g.onload=function(){
-vapi=window.vapiSDK.run({
-apiKey:'427dc07e-55be-450c-9d08-de52f47d98d5',
-assistant:'8cebdd26-3879-4b05-8f8d-e9367a7fa9df',
-config:{hideButton:true}
-});
+vapi=window.vapiSDK.run({apiKey:'427dc07e-55be-450c-9d08-de52f47d98d5',assistant:'8cebdd26-3879-4b05-8f8d-e9367a7fa9df',config:{hideButton:true}});
 vapi.on('call-start',function(){callActive=true;document.getElementById('callBtn').classList.add('active');document.getElementById('btnText').textContent='End Call';document.getElementById('status').textContent='Connected — Veronica is live';});
 vapi.on('call-end',function(){callActive=false;document.getElementById('callBtn').classList.remove('active');document.getElementById('btnText').textContent='Call Veronica Now';document.getElementById('status').textContent='Call ended';setTimeout(function(){document.getElementById('status').textContent='';},3000);});
 vapi.on('error',function(){document.getElementById('status').textContent='Something went wrong — try again';document.getElementById('callBtn').classList.remove('active');document.getElementById('btnText').textContent='Call Veronica Now';callActive=false;});
 };
+g.onerror=function(){document.getElementById('status').textContent='Connection error — refresh and try again';};
 })(document,'script');
 function handleCall(){if(!vapi){document.getElementById('status').textContent='Loading — try again in a moment';return;}if(callActive){vapi.stop();}else{document.getElementById('status').textContent='Connecting...';vapi.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');}}
 </script>
