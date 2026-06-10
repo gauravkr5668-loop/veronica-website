@@ -128,27 +128,56 @@ var vapi=null,callActive=false;
 var transcriptBody=document.getElementById('transcriptBody');
 var emptyState=document.getElementById('emptyState');
 var transcriptDot=document.getElementById('transcriptDot');
-var lastRole=null;
+var assistantBuffer=[];
+var bufferTimer=null;
+var vapiIsSpeaking=false;
 
-function addMessage(role, text){
-  if(!text || !text.trim()) return;
-  if(emptyState.parentNode) emptyState.style.display='none';
+function flushAssistantBuffer(){
+  if(assistantBuffer.length===0) return;
+  var combined=assistantBuffer.join(' ').trim();
+  assistantBuffer=[];
+  if(!combined) return;
+  if(emptyState) emptyState.style.display='none';
   var msg=document.createElement('div');
-  msg.className='msg '+(role==='assistant'?'veronica':'user');
+  msg.className='msg veronica';
   var label=document.createElement('div');
   label.className='msg-label';
-  label.textContent=role==='assistant'?'Veronica':'Caller';
+  label.textContent='Veronica';
   var bubble=document.createElement('div');
   bubble.className='msg-bubble';
-  bubble.textContent=text;
+  bubble.textContent=combined;
   msg.appendChild(label);
   msg.appendChild(bubble);
   transcriptBody.appendChild(msg);
   transcriptBody.scrollTop=transcriptBody.scrollHeight;
-  lastRole=role;
+}
+
+function addMessage(role, text){
+  if(!text || !text.trim()) return;
+  if(role==='assistant'){
+    assistantBuffer.push(text.trim());
+    if(bufferTimer) clearTimeout(bufferTimer);
+    bufferTimer=setTimeout(flushAssistantBuffer, 1500);
+  } else {
+    flushAssistantBuffer();
+    if(emptyState) emptyState.style.display='none';
+    var msg=document.createElement('div');
+    msg.className='msg user';
+    var label=document.createElement('div');
+    label.className='msg-label';
+    label.textContent='Caller';
+    var bubble=document.createElement('div');
+    bubble.className='msg-bubble';
+    bubble.textContent=text;
+    msg.appendChild(label);
+    msg.appendChild(bubble);
+    transcriptBody.appendChild(msg);
+    transcriptBody.scrollTop=transcriptBody.scrollHeight;
+  }
 }
 
 function showTyping(){
+  if(vapiIsSpeaking) return;
   var t=document.getElementById('typingIndicator');
   if(!t){
     t=document.createElement('div');
@@ -174,15 +203,18 @@ function hideTyping(){
 
     vapi.on('call-start',function(){
       callActive=true;
+      vapiIsSpeaking=false;
       document.getElementById('callBtn').classList.add('active');
       document.getElementById('btnText').textContent='End Call';
       document.getElementById('status').textContent='Connected — Veronica is live';
       transcriptDot.classList.add('live');
-      emptyState.style.display='none';
+      if(emptyState) emptyState.style.display='none';
     });
 
     vapi.on('call-end',function(){
       callActive=false;
+      vapiIsSpeaking=false;
+      flushAssistantBuffer();
       hideTyping();
       document.getElementById('callBtn').classList.remove('active');
       document.getElementById('btnText').textContent='Call Veronica Now';
@@ -192,19 +224,20 @@ function hideTyping(){
     });
 
     vapi.on('speech-start',function(){
+      vapiIsSpeaking=true;
       hideTyping();
     });
 
     vapi.on('speech-end',function(){
-      if(callActive) showTyping();
+      vapiIsSpeaking=false;
     });
 
     vapi.on('message',function(msg){
-      if(msg.type==='transcript'){
-        if(msg.transcriptType==='final'){
-          hideTyping();
-          addMessage(msg.role, msg.transcript);
-          if(msg.role==='user' && callActive) showTyping();
+      if(msg.type==='transcript' && msg.transcriptType==='final'){
+        hideTyping();
+        addMessage(msg.role, msg.transcript);
+        if(msg.role==='user' && callActive && !vapiIsSpeaking){
+          setTimeout(showTyping, 300);
         }
       }
     });
@@ -215,6 +248,7 @@ function hideTyping(){
       document.getElementById('btnText').textContent='Call Veronica Now';
       transcriptDot.classList.remove('live');
       callActive=false;
+      vapiIsSpeaking=false;
     });
   };
   g.onerror=function(){document.getElementById('status').textContent='Connection error — refresh and try again';};
@@ -225,13 +259,15 @@ function handleCall(){
   if(callActive){vapi.stop();}
   else{
     document.getElementById('status').textContent='Connecting...';
-    // Clear transcript for new call
+    assistantBuffer=[];
+    vapiIsSpeaking=false;
     transcriptBody.innerHTML='';
     var empty=document.createElement('div');
     empty.className='empty-state';
     empty.id='emptyState';
     empty.innerHTML='<div class="empty-icon"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--ink-soft);fill:none;stroke-width:1.5"><path d="M12 18.5A6.5 6.5 0 0 1 5.5 12V7a6.5 6.5 0 0 1 13 0v5a6.5 6.5 0 0 1-6.5 6.5z"/><path d="M19 12a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="9" y1="22" x2="15" y2="22"/></svg></div><span class="empty-text">Transcript appears here during the call</span>';
     transcriptBody.appendChild(empty);
+    emptyState=document.getElementById('emptyState');
     vapi.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');
   }
 }
