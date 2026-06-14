@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Board — AU Outreach Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#16151a;
+    --surface:#1f1e25;
+    --surface-2:#2a2933;
+    --border:#3a3845;
+    --text:#f3efe6;
+    --text-dim:#9b97a6;
+    --accent:#ff6a1a;
+    --accent-dim:#5a3520;
+    --teal:#4fb6a8;
+    --grey:#6e6b78;
+    --success:#6cbf4e;
+    --danger:#e2574c;
+    --warn-bg:repeating-linear-gradient(45deg, var(--accent) 0 10px, #1a1a1a 10px 20px);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:0 0 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 16px;}
+
+  /* ---------- HEADER / GOAL BOARD ---------- */
+  .stripe{height:6px; background:var(--warn-bg); width:100%;}
+  header{padding:28px 0 20px;}
+  .eyebrow{
+    font-family:'Oswald',sans-serif;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:6px; font-weight:600;
+  }
+  h1{
+    font-family:'Oswald',sans-serif;
+    font-size:36px; text-transform:uppercase; letter-spacing:.04em;
+    font-weight:700; margin-bottom:18px;
+  }
+  .goal-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 20px;
+  }
+  .goal-top{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:10px; margin-bottom:12px;
+  }
+  .goal-amount{font-family:'Oswald',sans-serif; font-size:34px; font-weight:700; line-height:1;}
+  .goal-amount span{color:var(--text-dim); font-size:20px; font-weight:500;}
+  .goal-days{
+    font-family:'Oswald',sans-serif; font-size:15px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.05em;
+    padding:6px 12px; border-radius:6px; background:var(--surface-2);
+    border:1px solid var(--border);
+  }
+  .goal-days.over{color:var(--danger); border-color:var(--danger);}
+  .bar-track{
+    width:100%; height:14px; background:var(--surface-2);
+    border-radius:7px; overflow:hidden; border:1px solid var(--border);
+  }
+  .bar-fill{height:100%; background:var(--accent); transition:width .3s ease;}
+  .goal-settings{
+    display:flex; gap:18px; margin-top:14px; flex-wrap:wrap;
+    font-size:12px; color:var(--text-dim);
+  }
+  .goal-settings label{display:flex; flex-direction:column; gap:4px; font-family:'Inter',sans-serif;}
+  .goal-settings input{
+    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:5px; padding:6px 8px; font-family:'Inter',sans-serif; font-size:13px;
+    width:130px;
+  }
+
+  /* ---------- DAILY TALLY ---------- */
+  .tally-section{margin-top:26px;}
+  .tally-row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;}
+  .tally-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:16px; text-align:center;
+  }
+  .tally-card .label{
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:6px;
+  }
+  .tally-card .num{font-family:'Oswald',sans-serif; font-size:42px; font-weight:700; line-height:1;}
+  .tally-buttons{display:flex; gap:8px; justify-content:center; margin-top:10px;}
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    border:none; border-radius:6px; padding:8px 14px; cursor:pointer;
+    transition:opacity .15s ease;
+  }
+  .btn:hover{opacity:.85;}
+  .btn-accent{background:var(--accent); color:#1a1308;}
+  .btn-ghost{background:var(--surface-2); color:var(--text); border:1px solid var(--border);}
+  .btn-small{padding:5px 10px; font-size:12px;}
+
+  /* ---------- FILTER TABS ---------- */
+  .tabs{
+    display:flex; gap:8px; margin:26px 0 14px; overflow-x:auto; padding-bottom:4px;
+  }
+  .tab{
+    font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em;
+    font-weight:600; white-space:nowrap; padding:8px 14px; border-radius:20px;
+    background:var(--surface); border:1px solid var(--border); color:var(--text-dim); cursor:pointer;
+  }
+  .tab.active{background:var(--accent); color:#1a1308; border-color:var(--accent);}
+  .tab .count{opacity:.7; margin-left:4px;}
+
+  /* ---------- LEAD LIST ---------- */
+  .section-title{
+    font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--text-dim); margin:22px 0 10px;
+  }
+  .lead-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px; margin-bottom:10px; position:relative;
+    border-left:5px solid var(--grey);
+  }
+  .lead-card.b1{border-left-color:var(--accent);}
+  .lead-card.b2{border-left-color:var(--teal);}
+  .lead-card.b3{border-left-color:var(--grey);}
+  .lead-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .lead-name{font-family:'Oswald',sans-serif; font-weight:600; font-size:17px; flex:1;}
+  .bucket-pill{
+    font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; letter-spacing:.05em;
+    padding:3px 9px; border-radius:12px; text-transform:uppercase; white-space:nowrap;
+  }
+  .b1 .bucket-pill{background:var(--accent-dim); color:var(--accent);}
+  .b2 .bucket-pill{background:#1d3f3b; color:var(--teal);}
+  .b3 .bucket-pill{background:#33323b; color:var(--grey);}
+  .lead-links{display:flex; gap:14px; margin:8px 0; font-size:13px; flex-wrap:wrap;}
+  .lead-links a{color:var(--teal); text-decoration:none; font-weight:500;}
+  .lead-links a:hover{text-decoration:underline;}
+  .lead-row{display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:center;}
+  .lead-row label{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em; margin-right:4px;}
+  select, input[type="date"], input[type="text"], input[type="number"], textarea{
+    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:6px; padding:7px 9px; font-family:'Inter',sans-serif; font-size:13px;
+  }
+  select{cursor:pointer;}
+  textarea{width:100%; resize:vertical; min-height:36px; margin-top:8px; font-size:13px;}
+  .due-tag{
+    font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    padding:3px 8px; border-radius:10px;
+  }
+  .due-tag.overdue{background:var(--danger); color:#1a0e0c;}
+  .due-tag.today{background:var(--accent); color:#1a1308;}
+  .delete-btn{
+    background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:18px;
+    line-height:1; padding:0 4px;
+  }
+  .delete-btn:hover{color:var(--danger);}
+  .won-box{
+    margin-top:10px; padding:10px; background:var(--surface-2); border-radius:6px;
+    display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  }
+  .won-box.locked{color:var(--success); font-weight:600; font-size:13px;}
+  .empty-state{
+    text-align:center; padding:40px 20px; color:var(--text-dim);
+    border:1px dashed var(--border); border-radius:10px; font-size:14px;
+  }
+
+  /* ---------- ADD LEAD FORM ---------- */
+  .add-form{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:16px; margin-bottom:14px; display:none;
+  }
+  .add-form.open{display:block;}
+  .add-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .add-grid .full{grid-column:1 / -1;}
+  .add-grid label{display:block; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;}
+  .add-grid input, .add-grid select, .add-grid textarea{width:100%;}
+  .add-actions{margin-top:12px; display:flex; gap:8px;}
+
+  /* ---------- SCRIPT / OPENER BOX ---------- */
+  .script-box{margin-top:10px;}
+  .script-box label{
+    font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em;
+    display:block; margin-bottom:4px;
+  }
+  .script-box textarea{
+    width:100%; min-height:64px; font-size:13px; line-height:1.4;
+    border-color:var(--accent-dim);
+  }
+  .copy-btn{margin-top:6px;}
+  .copy-btn.copied{background:var(--success); color:#0e1a0c;}
+
+  /* ---------- REVENUE LOG ---------- */
+  .rev-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 14px; background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; margin-bottom:8px; font-size:14px;
+  }
+  .rev-row .amt{font-family:'Oswald',sans-serif; font-weight:700; color:var(--success);}
+
+  @media (max-width:520px){
+    h1{font-size:28px;}
+    .goal-amount{font-size:26px;}
+    .add-grid{grid-template-columns:1fr;}
+    .tally-card .num{font-size:34px;}
+  }
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">AU Plumber Push · Calls + FB DMs</div>
+    <h1>The Board</h1>
+
+    <div class="goal-card">
+      <div class="goal-top">
+        <div class="goal-amount" id="goalAmount">$0 <span>/ $1000 AUD</span></div>
+        <div class="goal-days" id="goalDays">— days left</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="goalBar" style="width:0%"></div></div>
+      <div class="goal-settings">
+        <label>Target ($AUD)
+          <input type="number" id="targetInput" min="0" step="50">
+        </label>
+        <label>Deadline
+          <input type="date" id="deadlineInput">
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <section class="tally-section">
+    <div class="section-title">Today's Tally</div>
+    <div class="tally-row">
+      <div class="tally-card">
+        <div class="label">Calls Made</div>
+        <div class="num" id="callsNum">0</div>
+        <div class="tally-buttons">
+          <button class="btn btn-accent" onclick="bumpTally('calls',1)">+1 Call</button>
+          <button class="btn btn-ghost btn-small" onclick="bumpTally('calls',-1)">−1</button>
+        </div>
+      </div>
+      <div class="tally-card">
+        <div class="label">FB DMs Sent</div>
+        <div class="num" id="dmsNum">0</div>
+        <div class="tally-buttons">
+          <button class="btn btn-accent" onclick="bumpTally('dms',1)">+1 DM</button>
+          <button class="btn btn-ghost btn-small" onclick="bumpTally('dms',-1)">−1</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+    <button class="btn btn-accent" onclick="toggleAddForm()">+ Add Lead</button>
+    <button class="btn btn-ghost" onclick="loadSamples()">Load 20 Real AU Plumber Leads</button>
+  </div>
+
+  <div class="add-form" id="addForm">
+    <div class="add-grid">
+      <div>
+        <label>Business Name</label>
+        <input type="text" id="newName" placeholder="e.g. Bayside Plumbing">
+      </div>
+      <div>
+        <label>Bucket</label>
+        <select id="newBucket">
+          <option value="1">Bucket 1 — FB page only, no site</option>
+          <option value="2">Bucket 2 — Old/basic website</option>
+          <option value="3">Bucket 3 — Modern site, low priority</option>
+        </select>
+      </div>
+      <div>
+        <label>Phone</label>
+        <input type="text" id="newPhone" placeholder="+61 4XX XXX XXX">
+      </div>
+      <div>
+        <label>Facebook Link</label>
+        <input type="text" id="newFb" placeholder="facebook.com/...">
+      </div>
+      <div class="full">
+        <label>Notes (what you noticed about them)</label>
+        <textarea id="newNotes" placeholder="e.g. Active page, 4.8★ from 60 reviews, covers Western Sydney"></textarea>
+      </div>
+    </div>
+    <div class="add-actions">
+      <button class="btn btn-accent" onclick="addLead()">Add to Board</button>
+      <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
+    </div>
+  </div>
+
+  <div id="leadList"></div>
+
+  <div class="section-title">Closed Deals</div>
+  <div id="revList"></div>
+
+</div>
+
+<script>
+const STATUSES = [
+  "Not contacted",
+  "Called – no answer",
+  "Called – talked",
+  "Voicemail left",
+  "DM sent",
+  "Replied / warm",
+  "Demo sent",
+  "Booked demo",
+  "Closed – won",
+  "Not interested"
+];
+
+let state = null;
+let activeTab = 'all';
+
+const todayStr = () => new Date().toISOString().slice(0,10);
+
+const fbSearch = (q) => `https://www.facebook.com/search/pages/?q=${encodeURIComponent(q)}`;
+
+// 12 real AU plumbing businesses (8 from prior research + 4 with confirmed FB pages)
+const SEED_LEADS = [
+  {
+    name: "Sydney Essential Plumbing", bucket: "1", phone: "0450 528 494",
+    fb: fbSearch("Sydney Essential Plumbing"),
+    notes: "5.0★ from 31 reviews on Google — small, newer-looking operation. Good fit for solo-operator pitch.",
+    script: "Hey, saw Sydney Essential Plumbing's got a perfect 5.0 star rating from 31 reviews — not bad at all. Look, I'll be straight, this is a cold call, I'll keep it quick and you can hang up if it's not useful. Quick one: when you're under a house on a job, what happens to calls that come in?"
+  },
+  {
+    name: "North Sydney Plumbing", bucket: "1", phone: "0467 043 013",
+    fb: fbSearch("North Sydney Plumbing"),
+    notes: "5.0★ from 36 reviews. Small operator, North Sydney.",
+    script: "Hey, saw North Sydney Plumbing's sitting on a perfect 5.0 from 36 reviews — solid. Full disclosure, this is a cold call, I'll be quick and you're welcome to hang up if it's not for you. Question: do calls ever go unanswered while you're on tools?"
+  },
+  {
+    name: "Service Today Plumber Sydney", bucket: "1", phone: "0488 884 571",
+    fb: fbSearch("Service Today Plumber Sydney"),
+    notes: "4.7★ from 70 reviews. 'Service Today' branding suggests they push fast response — good angle for missed-call pain.",
+    script: "Hey, saw Service Today Plumber's got 70 reviews at 4.7 stars — and with a name like 'Service Today,' speed's obviously part of the pitch. Look, this is a cold call, I'll be quick, hang up if it's not useful. Quick one: does every call actually get answered, even when you're mid-job?"
+  },
+  {
+    name: "Penrith City Plumbing Services", bucket: "1", phone: "0422 720 132",
+    fb: "https://www.facebook.com/metroplumbingsyd/",
+    notes: "Active FB page — 100% recommend (13 reviews). Covers Penrith, Blacktown, Parramatta, Emu Plains, Mount Druitt — wide Western Sydney coverage. Personality-driven page (community posts, local awards).",
+    script: "Hey, saw Penrith City Plumbing's FB page — 100% recommend, and you're covering everything from Penrith to Blacktown to Parramatta. Look, I'll be straight, this is a cold call, keep it quick and hang up if it's not useful. Quick one: covering that much ground, do calls ever go unanswered while you're between jobs?"
+  },
+  {
+    name: "Parramatta Plumbing Services", bucket: "1", phone: "",
+    fb: "https://www.facebook.com/parraplumb/",
+    notes: "FB page since 2020, 0 reviews — looks like a solo operator, personal Gmail listed as contact. No phone found yet, message via FB Messenger first.",
+    script: "Hey, saw Parramatta Plumbing Services on Facebook — looks like a one-man operation covering design, install and repair. Full disclosure, this is a cold message, no worries if it's not useful. Quick one: when you're on a job, what happens to calls or messages that come in?"
+  },
+  {
+    name: "Camden Valley Plumbing", bucket: "1", phone: "",
+    fb: "https://www.facebook.com/camdenvalleyplumbing/",
+    notes: "Campbelltown-based, gas fitting + blocked drains + hot water. Fun, personality-driven FB page copy ('Picassos of pipes'). No phone found yet — check FB page for contact.",
+    script: "Hey, love the FB page for Camden Valley Plumbing — 'Picassos of pipes' is a great line. Full disclosure, this is a cold message, no worries if it's not useful. Quick one: between jobs, do calls or enquiries ever slip through?"
+  },
+  {
+    name: "Plumbing Central Sydney", bucket: "2", phone: "(02) 9559 5054",
+    fb: fbSearch("Plumbing Central Sydney"),
+    notes: "4.9★ from 69 reviews. Has a website (plumbingcentral.com.au) — check if it's modern or due for a refresh.",
+    script: "Hey, saw Plumbing Central's got a 4.9 star rating from 69 reviews — strong reputation. Full disclosure, this is a cold call, keep it short and hang up if it's not useful. Quick q: when you're out on jobs, do calls ever slip through to voicemail?"
+  },
+  {
+    name: "Greater Sydney Plumbing Services", bucket: "2", phone: "0424 503 372",
+    fb: fbSearch("Greater Sydney Plumbing Services"),
+    notes: "5.0★ from 120 reviews. Domain: greatersydneyplumbingservices.com.au.",
+    script: "Hey, saw Greater Sydney Plumbing Services has a perfect 5.0 from 120 reviews — that's a lot of happy customers. Look, I'll be upfront, this is a cold call, say the word and I'll let you go. Quick one: ever miss a call while you're on a job?"
+  },
+  {
+    name: "Quintessential Plumbing Sydney", bucket: "2", phone: "(02) 9002 7385",
+    fb: fbSearch("Quintessential Plumbing Sydney"),
+    notes: "4.8★ from 157 reviews. Domain: quintessentialplumbing.com.au.",
+    script: "Hey, saw Quintessential Plumbing's at 4.8 stars from 157 reviews — solid track record. This is a cold call, I'll be quick, feel free to cut me off if it's not useful. Quick one: with that many jobs, do calls ever go unanswered during the day?"
+  },
+  {
+    name: "SPS Plumbers", bucket: "2", phone: "(02) 9002 7332",
+    fb: fbSearch("SPS Plumbers Sydney"),
+    notes: "4.7★ from 389 reviews — busier operation, possibly multiple staff. Domain: spsplumbers.com.au.",
+    script: "Hey, saw SPS Plumbers has 389 reviews at 4.7 stars — that's a serious volume of jobs. Full disclosure, this is a cold call, keep it short, hang up if it's not for you. Quick one: with that much call volume, does anyone ever fall through the cracks after hours?"
+  },
+  {
+    name: "CRG Plumbing & Maintenance", bucket: "2", phone: "02 4656 4064",
+    fb: fbSearch("CRG Plumbing Maintenance Campbelltown"),
+    notes: "Founded 2010, Campbelltown/Macarthur region, $20M public liability insurance, has at least one additional staff member. More established — good Bucket 2 bundle candidate.",
+    script: "Hey, saw CRG Plumbing's been running since 2010 across Campbelltown and the Macarthur region — solid track record. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: with the team out on jobs across that whole area, does every call still get answered personally?"
+  },
+  {
+    name: "Dial Up Plumbing Sydney", bucket: "3", phone: "(02) 8999 6125",
+    fb: fbSearch("Dial Up Plumbing Sydney"),
+    notes: "4.9★ from 290 reviews — well established, likely has a decent website already (dialupplumbing.com.au). Lower priority, good for testing the pitch on a bigger operator.",
+    script: "Hey, saw Dial Up Plumbing's got 290 reviews at 4.9 stars — clearly doing a lot right. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: with a team that size, does every call still get picked up personally, even after hours?"
+  },
+  {
+    name: "Hills District Plumbing", bucket: "1", phone: "",
+    fb: "https://www.facebook.com/HillsDistrictPlumbing/",
+    notes: "FB page has 407 likes, active (14 talking about this). Castle Hill / Hills District, blocked drains & maintenance focus. No phone confirmed yet — message via FB first.",
+    dmScript: "Hey, saw Hills District Plumbing's FB page — 407 likes, looks like a solid local presence in Castle Hill. Full disclosure, this is a cold message, no worries if it's not useful. Quick one: when you're out on jobs, what happens to enquiries that come in?"
+  },
+  {
+    name: "GSM Plumbing", bucket: "1", phone: "",
+    fb: fbSearch("GSM Plumbing Castle Hill"),
+    notes: "25 years in Castle Hill / Hills District. Reviews mention the owner 'Greg' personally — sounds like a hands-on owner-operator. No phone confirmed yet, check FB page.",
+    dmScript: "Hey, saw GSM Plumbing's been trusted in Castle Hill for 25 years — reviews keep mentioning Greg by name, which says a lot. Full disclosure, this is a cold message, no worries if it's not useful. Quick one: after 25 years on the tools, do calls ever slip through when you're under a house?"
+  },
+  {
+    name: "Bayside Plumbing", bucket: "2", phone: "0411 724 011",
+    fb: fbSearch("Bayside Plumbing Sydney"),
+    notes: "4.9★ from 571 reviews. Mobile number listed (0411) — likely owner-operator despite the high review count.",
+    script: "Hey, saw Bayside Plumbing's sitting on 4.9 stars from 571 reviews — that's a serious reputation. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: with that many jobs, does every call still get answered personally?"
+  },
+  {
+    name: "Sydney On Call Plumbing", bucket: "2", phone: "",
+    fb: fbSearch("Sydney On Call Plumbing"),
+    notes: "4.8★ from 252 reviews. No direct phone found — check FB page/website for contact.",
+    dmScript: "Hey, saw Sydney On Call Plumbing's got 4.8 stars from 252 reviews — solid. Full disclosure, this is a cold message, no worries if it's not useful. Quick one: with a name like 'On Call', does every call actually get picked up, even after hours?"
+  },
+  {
+    name: "SilverWater Plumbing", bucket: "3", phone: "(02) 9099 5759",
+    fb: fbSearch("SilverWater Plumbing Sydney"),
+    notes: "4.9★ from 1237 reviews — large, established operation. Lower priority, good for testing pitch on a bigger team.",
+    script: "Hey, saw SilverWater Plumbing's got 1237 reviews at 4.9 stars — that's a huge track record. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: with a team that size, does anything ever fall through the cracks after hours?"
+  },
+  {
+    name: "Fixed Today", bucket: "3", phone: "0485 003 443",
+    fb: fbSearch("Fixed Today plumbing Sydney"),
+    notes: "4.8★ from 895 reviews. 'Fixed Today' branding = speed-focused. Larger operation, lower priority.",
+    script: "Hey, saw Fixed Today's got 895 reviews at 4.8 stars — and the name says it all, speed's the whole pitch. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: does 'fixed today' apply to every call too, even after hours?"
+  },
+  {
+    name: "Proximity Plumbing", bucket: "3", phone: "0420 102 394",
+    fb: fbSearch("Proximity Plumbing Sydney"),
+    notes: "4.9★ from 2461 reviews — one of the biggest in the dataset. Lower priority, mainly for testing the pitch on a large operator.",
+    script: "Hey, saw Proximity Plumbing's got 2461 reviews at 4.9 stars — that's massive. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: with that volume, does every enquiry get a response, even outside business hours?"
+  },
+  {
+    name: "Sydney Emergency Plumbing", bucket: "3", phone: "1800 862 565",
+    fb: fbSearch("Sydney Emergency Plumbing"),
+    notes: "4.6★ from 61 reviews. 1800 number suggests a bigger/call-centre setup — lower priority, but 'Emergency' branding makes missed-call framing very relevant.",
+    script: "Hey, saw Sydney Emergency Plumbing's got 4.6 stars from 61 reviews — with 'Emergency' in the name, I'd guess speed matters a lot to you. This is a cold call, I'll be quick, hang up if it's not useful. Quick one: does every emergency call actually get picked up, 24/7?"
+  }
+];
+
+// Converts a cold-call style opener into a Messenger/DM-appropriate version
+function toMessengerVersion(text){
+  return text
+    .replace(/this is a cold call/gi, "this is a cold message")
+    .replace(/you're welcome to hang up if it's not for you/gi, "no worries if it's not for you")
+    .replace(/keep it short, hang up if it's not for you/gi, "I'll keep it short, no worries if it's not for you")
+    .replace(/hang up if it's not for you/gi, "no worries if it's not for you")
+    .replace(/feel free to cut me off if it's not useful/gi, "feel free to ignore this if it's not useful")
+    .replace(/say the word and I'll let you go/gi, "just let me know and I'll leave it there")
+    .replace(/keep it quick and hang up if it's not useful/gi, "I'll keep it short, no worries if it's not useful")
+    .replace(/keep it short and hang up if it's not useful/gi, "I'll keep it short, no worries if it's not useful")
+    .replace(/hang up if it's not useful/gi, "feel free to ignore this if it's not useful");
+}
+
+function buildSeedLeads(startId){
+  return SEED_LEADS.map((s, i) => {
+    const callScript = s.script || '';
+    const dmScript = s.dmScript || (callScript ? toMessengerVersion(callScript) : '');
+    return {
+      id: startId + i,
+      name: s.name, bucket: s.bucket, phone: s.phone, fb: s.fb,
+      notes: s.notes, callScript, dmScript,
+      status: 'Not contacted', followUp: '', wonAmount: ''
+    };
+  });
+}
+
+function defaultState(){
+  const d = new Date();
+  d.setDate(d.getDate() + 18); // ~2.5 weeks default
+  return {
+    goal: { target: 1000, deadline: d.toISOString().slice(0,10) },
+    dailyLog: {},
+    leads: buildSeedLeads(1),
+    revenue: [],
+    nextId: SEED_LEADS.length + 1
+  };
+}
+
+function loadSamples(){
+  const existingNames = new Set(state.leads.map(l=>l.name));
+  const toAdd = buildSeedLeads(state.nextId).filter(l=>!existingNames.has(l.name));
+  if(toAdd.length===0){ alert('Sample leads are already on the board.'); return; }
+  state.nextId += toAdd.length;
+  state.leads = [...toAdd, ...state.leads];
+  saveState();
+  renderAll();
+}
+
+async function loadState(){
+  let loaded = null;
+  // Try Claude artifact storage first
+  try{
+    if(window.storage && window.storage.get){
+      const res = await window.storage.get('board-data', false);
+      if(res && res.value) loaded = res.value;
+    }
+  } catch(e){ /* not in artifact context */ }
+  // Fall back to localStorage (works when deployed standalone)
+  if(!loaded){
+    try{ loaded = localStorage.getItem('au-outreach-board'); } catch(e){}
+  }
+  if(loaded){
+    try{ state = JSON.parse(loaded); } catch(e){ state = defaultState(); }
+  } else {
+    state = defaultState();
+  }
+  // ensure today's log exists
+  if(!state.dailyLog[todayStr()]) state.dailyLog[todayStr()] = {calls:0, dms:0};
+  render();
+}
+
+async function saveState(){
+  const json = JSON.stringify(state);
+  try{
+    if(window.storage && window.storage.set){
+      await window.storage.set('board-data', json, false);
+    }
+  } catch(e){ /* not in artifact context */ }
+  try{ localStorage.setItem('au-outreach-board', json); } catch(e){ console.error('Save failed', e); }
+}
+
+// ---------- TALLY ----------
+function bumpTally(key, delta){
+  const t = todayStr();
+  if(!state.dailyLog[t]) state.dailyLog[t] = {calls:0, dms:0};
+  state.dailyLog[t][key] = Math.max(0, (state.dailyLog[t][key]||0) + delta);
+  saveState();
+  renderTally();
+}
+
+function renderTally(){
+  const t = state.dailyLog[todayStr()] || {calls:0, dms:0};
+  document.getElementById('callsNum').textContent = t.calls;
+  document.getElementById('dmsNum').textContent = t.dms;
+}
+
+// ---------- GOAL ----------
+function renderGoal(){
+  const total = state.revenue.reduce((s,r)=>s+Number(r.amount||0),0);
+  const target = state.goal.target || 1000;
+  document.getElementById('goalAmount').innerHTML = `$${total} <span>/ $${target} AUD</span>`;
+  const pct = Math.min(100, Math.round((total/target)*100));
+  document.getElementById('goalBar').style.width = pct + '%';
+
+  const deadline = new Date(state.goal.deadline + 'T00:00:00');
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  const diffDays = Math.round((deadline - now) / (1000*60*60*24));
+  const goalDaysEl = document.getElementById('goalDays');
+  if(diffDays < 0){
+    goalDaysEl.textContent = `${Math.abs(diffDays)} days overdue`;
+    goalDaysEl.classList.add('over');
+  } else if(diffDays === 0){
+    goalDaysEl.textContent = `Deadline is today`;
+    goalDaysEl.classList.remove('over');
+  } else {
+    goalDaysEl.textContent = `${diffDays} days left`;
+    goalDaysEl.classList.remove('over');
+  }
+  document.getElementById('targetInput').value = target;
+  document.getElementById('deadlineInput').value = state.goal.deadline;
+}
+
+document.getElementById('targetInput').addEventListener('change', e=>{
+  state.goal.target = Number(e.target.value)||1000;
+  saveState(); renderGoal();
+});
+document.getElementById('deadlineInput').addEventListener('change', e=>{
+  state.goal.deadline = e.target.value;
+  saveState(); renderGoal();
+});
+
+// ---------- TABS ----------
+function renderTabs(){
+  const leads = state.leads;
+  const dueCount = leads.filter(isDueOrOverdue).length;
+  const tabsDef = [
+    {key:'all', label:'All', count: leads.length},
+    {key:'due', label:'Due / Overdue', count: dueCount},
+    {key:'1', label:'Bucket 1', count: leads.filter(l=>l.bucket=='1').length},
+    {key:'2', label:'Bucket 2', count: leads.filter(l=>l.bucket=='2').length},
+    {key:'3', label:'Bucket 3', count: leads.filter(l=>l.bucket=='3').length},
+    {key:'won', label:'Won', count: leads.filter(l=>l.status==='Closed – won').length},
+  ];
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = tabsDef.map(t=>
+    `<div class="tab ${t.key===activeTab?'active':''}" onclick="setTab('${t.key}')">${t.label} <span class="count">${t.count}</span></div>`
+  ).join('');
+}
+
+function setTab(key){
+  activeTab = key;
+  renderTabs();
+  renderLeads();
+}
+
+function isDueOrOverdue(l){
+  if(!l.followUp) return false;
+  if(l.status === 'Closed – won' || l.status === 'Not interested') return false;
+  return l.followUp <= todayStr();
+}
+
+// ---------- LEADS ----------
+function toggleAddForm(){
+  document.getElementById('addForm').classList.toggle('open');
+}
+
+function generateScript(name, notes, hasPhone){
+  const contextLine = notes && notes.trim()
+    ? `Hey, saw ${name} — ${notes.trim().replace(/\.$/,'')}.`
+    : `Hey,`;
+  const callScript = hasPhone
+    ? `${contextLine} Look, I'll be straight, this is a cold call — keep it quick and hang up if it's not useful. Quick one: when you're on a job, what happens to calls that come in?`
+    : '';
+  const dmScript = hasPhone
+    ? toMessengerVersion(callScript)
+    : `${contextLine} Full disclosure, this is a cold message — no worries if it's not useful. Quick one: when you're on a job, what happens to calls or enquiries that come in?`;
+  return { callScript, dmScript };
+}
+
+function addLead(){
+  const name = document.getElementById('newName').value.trim();
+  if(!name){ alert('Give the business a name first.'); return; }
+  const notes = document.getElementById('newNotes').value.trim();
+  const phone = document.getElementById('newPhone').value.trim();
+  const { callScript, dmScript } = generateScript(name, notes, !!phone);
+  const lead = {
+    id: state.nextId++,
+    name,
+    bucket: document.getElementById('newBucket').value,
+    phone,
+    fb: document.getElementById('newFb').value.trim(),
+    notes,
+    callScript, dmScript,
+    status: 'Not contacted',
+    followUp: '',
+    wonAmount: ''
+  };
+  state.leads.unshift(lead);
+  saveState();
+  ['newName','newPhone','newFb','newNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('newBucket').value='1';
+  toggleAddForm();
+  renderAll();
+}
+
+function updateLead(id, field, value){
+  const lead = state.leads.find(l=>l.id===id);
+  if(!lead) return;
+  lead[field] = value;
+  saveState();
+  if(field==='status'){ renderAll(); } // status change can affect tabs/won box
+}
+
+function deleteLead(id){
+  if(!confirm('Remove this lead from the board?')) return;
+  state.leads = state.leads.filter(l=>l.id!==id);
+  saveState();
+  renderAll();
+}
+
+function confirmWon(id){
+  const lead = state.leads.find(l=>l.id===id);
+  const input = document.getElementById('wonAmt_'+id);
+  const amt = Number(input.value);
+  if(!amt || amt<=0){ alert('Enter the amount you got (AUD).'); return; }
+  lead.wonAmount = amt;
+  state.revenue.push({id: state.nextId++, name: lead.name, amount: amt, date: todayStr()});
+  saveState();
+  renderAll();
+}
+
+function renderLeads(){
+  let leads = state.leads.slice();
+  if(activeTab==='due') leads = leads.filter(isDueOrOverdue);
+  else if(activeTab==='won') leads = leads.filter(l=>l.status==='Closed – won');
+  else if(['1','2','3'].includes(activeTab)) leads = leads.filter(l=>l.bucket==activeTab);
+
+  const listEl = document.getElementById('leadList');
+  if(leads.length===0){
+    listEl.innerHTML = `<div class="empty-state">No leads here yet.${state.leads.length===0 ? ' Tap "+ Add Lead" to start building your board.' : ''}</div>`;
+    return;
+  }
+
+  listEl.innerHTML = leads.map(l=>{
+    const due = isDueOrOverdue(l);
+    let dueTag = '';
+    if(l.followUp && l.status!=='Closed – won' && l.status!=='Not interested'){
+      if(l.followUp < todayStr()) dueTag = '<span class="due-tag overdue">Overdue</span>';
+      else if(l.followUp === todayStr()) dueTag = '<span class="due-tag today">Due Today</span>';
+    }
+    const bucketLabel = {1:'Bucket 1', 2:'Bucket 2', 3:'Bucket 3'}[l.bucket] || 'Bucket ?';
+
+    let wonBox = '';
+    if(l.status==='Closed – won'){
+      if(l.wonAmount){
+        wonBox = `<div class="won-box locked">✓ Logged as $${l.wonAmount} AUD revenue</div>`;
+      } else {
+        wonBox = `<div class="won-box">
+          <label style="margin:0;">Amount won ($AUD)</label>
+          <input type="number" id="wonAmt_${l.id}" min="0" step="1" style="width:100px;">
+          <button class="btn btn-accent btn-small" onclick="confirmWon(${l.id})">Add to Revenue</button>
+        </div>`;
+      }
+    }
+
+    return `<div class="lead-card b${l.bucket}">
+      <div class="lead-top">
+        <div class="lead-name">${escapeHtml(l.name)}</div>
+        <span class="bucket-pill">${bucketLabel}</span>
+        <button class="delete-btn" onclick="deleteLead(${l.id})" title="Remove">×</button>
+      </div>
+      <div class="lead-links">
+        ${l.phone ? `<a href="tel:${escapeAttr(l.phone)}">📞 ${escapeHtml(l.phone)}</a>` : ''}
+        ${l.fb ? `<a href="${escapeAttr(l.fb.startsWith('http')?l.fb:'https://'+l.fb)}" target="_blank" rel="noopener">🔗 Facebook</a>` : ''}
+      </div>
+      <div class="lead-row">
+        <label>Status</label>
+        <select onchange="updateLead(${l.id}, 'status', this.value)">
+          ${STATUSES.map(s=>`<option value="${s}" ${s===l.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <label>Follow-up</label>
+        <input type="date" value="${l.followUp||''}" onchange="updateLead(${l.id}, 'followUp', this.value)">
+        ${dueTag}
+      </div>
+      <textarea placeholder="Notes..." onchange="updateLead(${l.id}, 'notes', this.value)">${escapeHtml(l.notes||'')}</textarea>
+      <div class="script-box">
+        <label>📞 Call Opener</label>
+        <textarea placeholder="No phone for this lead — use the DM opener below" onchange="updateLead(${l.id}, 'callScript', this.value)">${escapeHtml((l.callScript ?? l.script) || '')}</textarea>
+        <button class="btn btn-ghost btn-small copy-btn" id="copyBtn_${l.id}_call" onclick="copyScript(${l.id}, 'callScript')">📋 Copy Call Opener</button>
+      </div>
+      <div class="script-box">
+        <label>💬 Messenger DM Opener</label>
+        <textarea placeholder="Write a DM opener here" onchange="updateLead(${l.id}, 'dmScript', this.value)">${escapeHtml(l.dmScript || '')}</textarea>
+        <button class="btn btn-ghost btn-small copy-btn" id="copyBtn_${l.id}_dm" onclick="copyScript(${l.id}, 'dmScript')">📋 Copy DM Opener</button>
+      </div>
+      ${wonBox}
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(str){
+  return (str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escapeAttr(str){ return escapeHtml(str); }
+
+function copyScript(id, field){
+  const lead = state.leads.find(l=>l.id===id);
+  const text = lead ? (lead[field] || (field==='callScript' ? lead.script : '') || '') : '';
+  const suffix = field === 'callScript' ? 'call' : 'dm';
+  const btn = document.getElementById('copyBtn_'+id+'_'+suffix);
+  const flash = () => {
+    if(!btn) return;
+    const original = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(flash).catch(()=>fallbackCopy(text, flash));
+  } else {
+    fallbackCopy(text, flash);
+  }
+}
+
+function fallbackCopy(text, cb){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); cb(); } catch(e){ alert('Copy failed — long-press the text box to copy manually.'); }
+  document.body.removeChild(ta);
+}
+
+// ---------- REVENUE ----------
+function renderRevenue(){
+  const el = document.getElementById('revList');
+  if(state.revenue.length===0){
+    el.innerHTML = '<div class="empty-state">No deals logged yet — mark a lead "Closed – won" to log revenue here.</div>';
+    return;
+  }
+  el.innerHTML = state.revenue.slice().reverse().map(r=>
+    `<div class="rev-row"><span>${escapeHtml(r.name)} <span style="color:var(--text-dim); font-size:12px;">— ${r.date}</span></span><span class="amt">$${r.amount} AUD</span></div>`
+  ).join('');
+}
+
+// ---------- RENDER ALL ----------
+function renderAll(){
+  renderGoal();
+  renderTally();
+  renderTabs();
+  renderLeads();
+  renderRevenue();
+}
+function render(){ renderAll(); }
+
+loadState();
+</script>
+</body>
+</html>
