@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veronica — Your Next Receptionist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --stone-50:  #FAFAF9;
+    --stone-100: #F5F5F4;
+    --stone-200: #E7E5E4;
+    --stone-300: #D6D3D1;
+    --stone-400: #A8A29E;
+    --stone-500: #78716C;
+    --stone-600: #57534E;
+    --stone-700: #44403C;
+    --stone-800: #292524;
+    --stone-900: #1C1917;
+    --warm-white: #FDFCFB;
+    --cream:      #F9F6F1;
+    --gold:       #B8975A;
+    --gold-light: #D4B87A;
+    --gold-dark:  #8B6F3E;
+    --sage:       #8FA888;
+    --sage-light: #E8EFE7;
+    --rose:       #C9908A;
+    --green:      #4A9B6E;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body:    'Inter', -apple-system, sans-serif;
+    --max-w:   1200px;
+    --section-pad: 96px 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--warm-white);
+    color: var(--stone-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up { transition: none; opacity: 1; transform: none; }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.15; }
+  h1 { font-size: clamp(36px, 5.5vw, 72px); letter-spacing: -0.5px; color: var(--stone-900); }
+  h2 { font-size: clamp(28px, 4vw, 52px); letter-spacing: -0.3px; color: var(--stone-900); }
+  h3 { font-size: clamp(20px, 2.5vw, 28px); color: var(--stone-900); }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: ''; display: block; width: 20px; height: 1px; background: var(--gold);
+  }
+  .text-muted  { color: var(--stone-500); }
+  .text-body   { font-size: 17px; line-height: 1.7; color: var(--stone-600); font-weight: 300; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(253,252,251,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--stone-200);
+    padding: 0 20px;
+  }
+  .nav-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 21px; color: var(--stone-900);
+    letter-spacing: -0.3px; text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a {
+    font-size: 14px; font-weight: 400; color: var(--stone-600);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--stone-900); }
+  .btn-nav {
+    background: var(--stone-900); color: var(--warm-white) !important;
+    padding: 9px 20px; border-radius: 100px;
+    font-size: 13px !important; font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+  .btn-nav:hover { background: var(--stone-700) !important; }
+  .nav-mobile-cta {
+    display: none;
+    background: var(--stone-900); color: white;
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--stone-900); color: var(--warm-white);
+    padding: 16px 28px; border-radius: 100px;
+    font-size: 15px; font-weight: 500; text-decoration: none;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.1px; width: 100%;
+  }
+  .btn-primary:hover { background: var(--stone-700); transform: translateY(-1px); }
+  .btn-primary svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: transparent; color: var(--stone-700);
+    padding: 15px 28px; border-radius: 100px;
+    font-size: 15px; font-weight: 400; text-decoration: none;
+    border: 1px solid var(--stone-300); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    width: 100%;
+  }
+  .btn-outline:hover { border-color: var(--stone-600); color: var(--stone-900); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #hero {
+    padding: 100px 20px 48px;
+    background: #F7F2EB;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -80px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(184,151,90,0.16) 0%, rgba(205,170,110,0.08) 40%, transparent 70%);
+    filter: blur(40px); pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 600px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  /* Trust badge */
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border: 1px solid var(--stone-200);
+    border-radius: 100px; padding: 6px 14px 6px 8px;
+    font-size: 12px; color: var(--stone-600);
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .hero-badge-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 3px rgba(74,155,110,0.18);
+    flex-shrink: 0;
+  }
+
+  .hero-headline { margin-bottom: 18px; }
+
+  .hero-sub {
+    font-size: 18px; color: var(--stone-500); font-weight: 300;
+    line-height: 1.65; margin-bottom: 32px;
+  }
+
+  .hero-cta-stack {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 36px;
+  }
+
+  /* ── BUSINESS SNAPSHOT CARD ── */
+  .snapshot-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--stone-200);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    margin-top: 8px;
+  }
+  .snapshot-title {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--stone-100);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .snapshot-title-text {
+    font-size: 13px; font-weight: 600; color: var(--stone-700);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .snapshot-live {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; color: var(--green); font-weight: 500;
+    margin-left: auto;
+  }
+  .snapshot-live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .snapshot-cols {
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .snapshot-col {
+    padding: 16px 20px;
+  }
+  .snapshot-col:first-child {
+    border-right: 1px solid var(--stone-100);
+  }
+  .snapshot-col-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--stone-400);
+    margin-bottom: 12px;
+  }
+  .snapshot-col-label.with-veronica {
+    color: var(--gold);
+  }
+  .snapshot-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--stone-50);
+    font-size: 13px; color: var(--stone-600);
+  }
+  .snapshot-row:last-child { border-bottom: none; }
+  .snapshot-row-val { font-weight: 600; color: var(--stone-800); font-size: 13px; }
+  .snapshot-row-val.gold { color: var(--gold-dark); }
+  .snapshot-row-val.green { color: var(--green); }
+
+  .snapshot-result {
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #1C1917, #292524);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .snapshot-result-nums { display: flex; flex-direction: column; gap: 2px; }
+  .snapshot-result-big {
+    font-family: var(--font-display);
+    font-size: 22px; color: #6ECC99;
+    line-height: 1;
+  }
+  .snapshot-result-sub {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+  }
+  .snapshot-result-quote {
+    font-size: 11px; color: rgba(255,255,255,0.45);
+    font-style: italic; line-height: 1.5;
+    max-width: 160px; text-align: right;
+  }
+
+  /* ── HERO TRUST STATS (desktop) ── */
+  .hero-trust {
+    display: none;
+    margin-top: 44px; align-items: center; gap: 24px;
+    padding-top: 28px; border-top: 1px solid var(--stone-200);
+  }
+  .trust-item { display: flex; align-items: center; gap: 8px; }
+  .trust-num  { font-family: var(--font-display); font-size: 24px; color: var(--stone-900); }
+  .trust-label { font-size: 12px; color: var(--stone-400); line-height: 1.3; }
+  .trust-divider { width: 1px; height: 32px; background: var(--stone-200); }
+
+  /* ── SECTION SHARED ── */
+  section { padding: var(--section-pad); }
+  .container { max-width: var(--max-w); margin: 0 auto; }
+
+  /* ── CALCULATOR ── */
+  #calculator { background: var(--stone-900); color: white; }
+  #calculator h2 { color: white; }
+  #calculator .text-body { color: rgba(255,255,255,0.55); }
+  .calc-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 40px; margin-top: 48px;
+  }
+  .calc-inputs { display: flex; flex-direction: column; gap: 28px; }
+  .calc-field label {
+    display: block; font-size: 12px; color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px; margin-bottom: 10px;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .calc-slider-wrap { display: flex; align-items: center; gap: 14px; }
+  input[type=range] {
+    flex: 1; height: 4px;
+    -webkit-appearance: none; appearance: none;
+    background: rgba(255,255,255,0.15); border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px;
+    border-radius: 50%; background: white; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .calc-val {
+    font-family: var(--font-display); font-size: 22px; color: white;
+    min-width: 64px; text-align: right;
+  }
+  .calc-result {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 28px 24px;
+  }
+  .calc-result-label {
+    font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .calc-big {
+    font-family: var(--font-display); font-size: clamp(44px, 10vw, 72px);
+    color: white; line-height: 1; margin-bottom: 6px;
+  }
+  .calc-period { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+  .calc-breakdown { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+  .calc-row {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    font-size: 14px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.55); gap: 8px;
+  }
+  .calc-row .calc-row-val { color: white; font-weight: 500; }
+  .calc-cta { margin-top: 24px; }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--cream); }
+  .steps-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 2px; margin-top: 40px; border-radius: 16px; overflow: hidden;
+  }
+  .step {
+    background: white; padding: 28px 24px 26px;
+    position: relative; display: flex; gap: 20px; align-items: flex-start;
+  }
+  .step-num {
+    font-family: var(--font-display); font-size: 40px; color: var(--stone-100);
+    line-height: 1; flex-shrink: 0; width: 40px;
+  }
+  .step-body {}
+  .step-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; margin-bottom: 12px;
+  }
+  .step-icon svg { width: 20px; height: 20px; color: var(--gold); }
+  .step h4 {
+    font-family: var(--font-display); font-size: 18px;
+    margin-bottom: 6px; color: var(--stone-900);
+  }
+  .step p { font-size: 14px; color: var(--stone-500); line-height: 1.6; }
+
+  /* ── BENEFITS ── */
+  #benefits { background: var(--warm-white); }
+  .benefits-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 16px; margin-top: 40px;
+  }
+  .benefit-card {
+    background: var(--cream); border-radius: 16px; padding: 24px;
+    border: 1px solid var(--stone-100);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .benefit-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .benefit-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--stone-900);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .benefit-icon svg { width: 20px; height: 20px; color: white; }
+  .benefit-card h4 { font-size: 16px; font-weight: 600; color: var(--stone-900); margin-bottom: 6px; }
+  .benefit-card p { font-size: 14px; color: var(--stone-500); line-height: 1.6; }
+  .benefit-quote {
+    background: var(--stone-900); border-radius: 16px; padding: 28px 24px;
+    margin-top: 16px;
+  }
+  .benefit-quote blockquote {
+    font-family: var(--font-display); font-size: 20px; color: white;
+    font-style: italic; line-height: 1.5; margin-bottom: 18px;
+  }
+  .bq-author { display: flex; align-items: center; gap: 10px; }
+  .bq-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gold); display: flex; align-items: center;
+    justify-content: center; font-family: var(--font-display); font-size: 14px; color: white;
+    flex-shrink: 0;
+  }
+  .bq-name { font-size: 14px; font-weight: 500; color: white; }
+  .bq-role { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* ── CONVERSATIONS ── */
+  #conversations { background: var(--cream); }
+  .convo-tabs {
+    display: flex; gap: 4px; margin-bottom: 32px;
+    background: var(--stone-100); border-radius: 100px; padding: 4px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .convo-tabs::-webkit-scrollbar { display: none; }
+  .convo-tab {
+    padding: 9px 18px; border-radius: 100px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    color: var(--stone-500); border: none; background: none;
+    transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
+  }
+  .convo-tab.active {
+    background: white; color: var(--stone-900);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .convo-panels { position: relative; }
+  .convo-panel { display: none; }
+  .convo-panel.active { display: flex; flex-direction: column; gap: 28px; }
+  .convo-desc h3 { margin-bottom: 12px; }
+  .convo-desc p { font-size: 15px; color: var(--stone-500); line-height: 1.7; margin-bottom: 16px; }
+  .convo-outcome {
+    background: var(--sage-light); border-radius: 10px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .outcome-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sage); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .outcome-icon svg { width: 12px; height: 12px; color: white; }
+  .outcome-text { font-size: 13px; color: var(--stone-700); line-height: 1.5; }
+  .convo-thread {
+    background: white; border-radius: 16px; padding: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  }
+  .thread-header {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--stone-100); margin-bottom: 14px;
+  }
+  .thread-dot { width: 8px; height: 8px; border-radius: 50%; background: #5CB85C; flex-shrink: 0; }
+  .thread-label { font-size: 11px; color: var(--stone-400); }
+  .msg { margin-bottom: 12px; display: flex; flex-direction: column; }
+  .msg.v { align-items: flex-start; }
+  .msg.c { align-items: flex-end; }
+  .msg-who { font-size: 10px; color: var(--stone-400); margin-bottom: 3px; }
+  .msg-text {
+    padding: 9px 13px; border-radius: 14px;
+    font-size: 13px; line-height: 1.55; max-width: 90%;
+  }
+  .msg.v .msg-text {
+    background: var(--stone-50); color: var(--stone-800);
+    border: 1px solid var(--stone-100); border-radius: 4px 14px 14px 14px;
+  }
+  .msg.c .msg-text {
+    background: var(--stone-800); color: white;
+    border-radius: 14px 14px 4px 14px;
+  }
+  .msg-booked {
+    background: var(--sage-light); border: 1px solid var(--sage);
+    border-radius: 10px; padding: 10px 14px; margin: 6px 0;
+  }
+  .msg-booked-title {
+    font-size: 10px; color: var(--sage); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px;
+  }
+  .msg-booked-detail { font-size: 12px; color: var(--stone-700); }
+
+  /* ── BEHIND THE SCENES ── */
+  #behind { background: white; }
+  .behind-grid { display: flex; flex-direction: column; gap: 40px; }
+  .behind-features { display: flex; flex-direction: column; gap: 0; }
+  .behind-feature {
+    padding: 22px 0; border-bottom: 1px solid var(--stone-100);
+    display: flex; gap: 18px; cursor: pointer; transition: color 0.2s;
+  }
+  .behind-feature:first-child { padding-top: 0; }
+  .behind-feature.active .bf-num { color: var(--stone-900); }
+  .bf-num {
+    font-family: var(--font-display); font-size: 30px;
+    color: var(--stone-200); line-height: 1; min-width: 36px; transition: color 0.3s;
+  }
+  .bf-title { font-size: 16px; font-weight: 600; color: var(--stone-900); margin-bottom: 5px; }
+  .bf-desc { font-size: 13px; color: var(--stone-500); line-height: 1.6; }
+  .behind-visual {
+    background: var(--cream); border-radius: 20px; padding: 28px 24px;
+    min-height: 280px; display: flex; align-items: center; justify-content: center;
+  }
+  .cal-mockup { width: 100%; }
+  .cal-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+  }
+  .cal-month { font-family: var(--font-display); font-size: 16px; color: var(--stone-900); }
+  .cal-nav { display: flex; gap: 6px; }
+  .cal-nav-btn {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: white; border: 1px solid var(--stone-200);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--stone-500); font-size: 11px; cursor: pointer;
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day-label {
+    font-size: 9px; color: var(--stone-400); text-align: center;
+    padding: 3px; font-weight: 500; text-transform: uppercase;
+  }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; border-radius: 50%; color: var(--stone-700);
+  }
+  .cal-day.booked       { background: var(--stone-900); color: white; }
+  .cal-day.booked-light { background: var(--sage-light); color: var(--stone-800); }
+  .cal-day.today        { border: 2px solid var(--gold); color: var(--stone-900); font-weight: 600; }
+  .cal-day.empty        { opacity: 0; }
+  .cal-legend { margin-top: 14px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .cal-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--stone-500); }
+  .cal-legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--cream); }
+  .testi-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 16px; margin-top: 40px;
+  }
+  .testi-card {
+    background: white; border-radius: 16px; padding: 24px;
+    border: 1px solid var(--stone-100);
+    display: flex; flex-direction: column;
+  }
+  .testi-stars { display: flex; gap: 2px; margin-bottom: 14px; }
+  .star { color: var(--gold); font-size: 13px; }
+  .testi-text {
+    font-size: 15px; color: var(--stone-700); line-height: 1.7;
+    flex: 1; margin-bottom: 18px; font-style: italic;
+  }
+  .testi-text::before { content: '"'; }
+  .testi-text::after  { content: '"'; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--stone-200); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 15px; color: var(--stone-600); flex-shrink: 0;
+  }
+  .testi-name  { font-size: 14px; font-weight: 600; color: var(--stone-900); }
+  .testi-trade { font-size: 12px; color: var(--stone-400); }
+  .testi-big {
+    background: var(--stone-900); border-radius: 16px; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .testi-big-num {
+    font-family: var(--font-display); font-size: 60px;
+    color: var(--gold); line-height: 1;
+  }
+  .testi-big blockquote {
+    font-family: var(--font-display); font-size: 22px;
+    color: white; font-style: italic; line-height: 1.4; margin-bottom: 14px;
+  }
+  .testi-big-author { color: rgba(255,255,255,0.45); font-size: 13px; }
+
+  /* ── PRICING ── */
+  #pricing {}
+  .founding-banner {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: linear-gradient(135deg,#FBF5E8,#F3E9CE);
+    border: 1px solid rgba(184,151,90,0.35);
+    border-radius: 12px; padding: 16px 20px;
+    font-size: 14px; color: var(--stone-700);
+    margin: 28px 0 0;
+  }
+  .founding-icon { font-size: 18px; color: var(--gold); line-height: 1.4; flex-shrink: 0; }
+  .founding-banner strong { color: var(--stone-900); }
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 16px; margin-top: 40px;
+  }
+  .pricing-card {
+    background: var(--cream); border-radius: 20px; padding: 28px 24px;
+    border: 1px solid var(--stone-100); display: flex; flex-direction: column;
+  }
+  .pricing-card.featured { background: var(--stone-900); border-color: var(--stone-700); }
+  .pricing-badge {
+    font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+  }
+  .pricing-name { font-family: var(--font-display); font-size: 22px; margin-bottom: 6px; }
+  .pricing-card.featured .pricing-name { color: white; }
+  .pricing-desc { font-size: 13px; color: var(--stone-500); margin-bottom: 22px; line-height: 1.5; }
+  .pricing-card.featured .pricing-desc { color: rgba(255,255,255,0.45); }
+  .pricing-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+  .pricing-currency { font-size: 18px; color: var(--stone-600); }
+  .pricing-card.featured .pricing-currency { color: rgba(255,255,255,0.5); }
+  .pricing-amount { font-family: var(--font-display); font-size: 46px; line-height: 1; color: var(--stone-900); }
+  .pricing-card.featured .pricing-amount { color: white; }
+  .pricing-period { font-size: 13px; color: var(--stone-400); }
+  .pricing-card.featured .pricing-period { color: rgba(255,255,255,0.35); }
+  .pricing-setup { font-size: 12px; color: var(--stone-400); margin-top: 4px; margin-bottom: 22px; }
+  .pricing-setup-offer { color: var(--gold); font-weight: 500; }
+  .pricing-divider { height: 1px; background: var(--stone-200); margin-bottom: 22px; }
+  .pricing-card.featured .pricing-divider { background: rgba(255,255,255,0.08); }
+  .pricing-features { list-style: none; flex: 1; margin-bottom: 24px; }
+  .pricing-features li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 14px; color: var(--stone-600); padding: 6px 0;
+  }
+  .pricing-card.featured .pricing-features li { color: rgba(255,255,255,0.65); }
+  .pricing-check {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--sage-light); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .pricing-card.featured .pricing-check { background: rgba(255,255,255,0.1); }
+  .pricing-check svg { width: 8px; height: 8px; color: var(--sage); }
+  .pricing-card.featured .pricing-check svg { color: rgba(255,255,255,0.7); }
+  .pricing-feature-no {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--stone-300);
+    text-decoration: line-through;
+    text-decoration-color: rgba(0,0,0,0.08);
+    padding: 6px 0;
+  }
+  .pricing-cross {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--stone-100);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--stone-300); flex-shrink: 0;
+  }
+
+  /* ── CTA SECTION ── */
+  #cta { background: var(--stone-900); text-align: center; padding: var(--section-pad); }
+  #cta h2 { color: white; max-width: 560px; margin: 0 auto 16px; }
+  #cta .text-body { color: rgba(255,255,255,0.45); max-width: 400px; margin: 0 auto 36px; }
+  .cta-btns {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 320px; margin: 0 auto;
+  }
+  .btn-white { background: white; color: var(--stone-900) !important; }
+  .btn-white:hover { background: var(--stone-100) !important; }
+  .btn-ghost {
+    background: transparent; color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.2); width: 100%;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 15px 28px; border-radius: 100px;
+    font-size: 15px; cursor: pointer; text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: white; }
+  .cta-trust {
+    margin-top: 32px; display: flex; justify-content: center;
+    align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .cta-trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.3); }
+  .cta-trust-item svg { width: 13px; height: 13px; opacity: 0.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--stone-900); border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 36px 20px;
+  }
+  .footer-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px; text-align: center;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 18px; color: white; }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: none; }
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-wrap { display: none; }
+
+  /* ═══════════════════════════════════════════
+     TABLET & DESKTOP — 700px+
+  ═══════════════════════════════════════════ */
+  @media (min-width: 700px) {
+    :root { --section-pad: 112px 32px; }
+
+    #hero { padding: 120px 32px 64px; }
+    .hero-inner { max-width: 700px; }
+    .hero-cta-stack {
+      flex-direction: row; gap: 14px; flex-wrap: wrap;
+    }
+    .btn-primary, .btn-outline { width: auto; }
+    .hero-trust { display: flex; }
+
+    .snapshot-result-quote { display: block; }
+
+    .calc-grid { grid-template-columns: 1fr 1fr; }
+
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .step { flex-direction: column; gap: 0; }
+    .step-num { margin-bottom: 14px; }
+
+    .benefits-grid { grid-template-columns: 1fr 1fr; }
+
+    .convo-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+
+    .behind-grid { flex-direction: row; gap: 64px; align-items: flex-start; }
+    .behind-grid > div:first-child { flex: 1; }
+    .behind-visual { flex: 1; }
+
+    .testi-grid { grid-template-columns: repeat(2, 1fr); }
+    .testi-big { flex-direction: row; align-items: center; gap: 32px; }
+
+    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+    .compare-wrap { display: block; }
+
+    .cta-btns { flex-direction: row; justify-content: center; max-width: none; }
+    .btn-ghost { width: auto; }
+
+    .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+
+    .nav-links { display: flex; }
+    .nav-mobile-cta { display: none; }
+  }
+
+  @media (min-width: 900px) {
+    :root { --section-pad: 120px 32px; }
+    #hero { padding: 140px 32px 80px; }
+    .hero-inner { max-width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .hero-cta-col { /* left column */ }
+    .hero-snapshot-col { margin-top: 0; }
+    .hero-trust { display: flex; }
+    .steps-grid { grid-template-columns: repeat(4, 1fr); }
+    .testi-grid { grid-template-columns: repeat(3, 1fr); }
+    .nav-inner { height: 68px; }
+    nav { padding: 0 32px; }
+  }
+
+  /* ── NAV MOBILE ── */
+  @media (max-width: 699px) {
+    .nav-links { display: none; }
+    .nav-mobile-cta { display: inline-flex; }
+  }
+
+  /* ── COMPARISON TABLE (desktop only) ── */
+  .compare-wrap {
+    margin-top: 56px; background: white;
+    border-radius: 20px; border: 1px solid var(--stone-200); overflow: hidden;
+  }
+  .compare-title {
+    font-family: var(--font-display); font-size: 22px; color: var(--stone-900);
+    padding: 28px 36px 20px; border-bottom: 1px solid var(--stone-100);
+  }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .compare-table thead th {
+    padding: 16px 14px; text-align: center;
+    font-weight: 500; color: var(--stone-700);
+    border-bottom: 2px solid var(--stone-100); font-size: 13px;
+  }
+  .compare-table thead th span { display: block; font-size: 11px; color: var(--stone-400); font-weight: 400; margin-top: 2px; }
+  .compare-fcol { text-align: left !important; padding-left: 36px !important; font-weight: 400; color: var(--stone-700) !important; }
+  .compare-hl { background: rgba(184,151,90,0.05); border-left: 1px solid rgba(184,151,90,0.18); border-right: 1px solid rgba(184,151,90,0.18); }
+  .compare-hl-h { background: rgba(184,151,90,0.09); border-left: 1px solid rgba(184,151,90,0.25); border-right: 1px solid rgba(184,151,90,0.25); color: var(--stone-900) !important; }
+  .compare-table tbody td {
+    padding: 11px 14px; text-align: center;
+    color: var(--stone-500); border-bottom: 1px solid var(--stone-100);
+  }
+  .compare-sec td {
+    background: var(--stone-50); font-size: 10px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase; color: var(--stone-400);
+    padding: 9px 36px !important; text-align: left !important;
+  }
+  .ct { color: #5A9B6E !important; font-size: 15px; font-weight: 700; }
+  .cx { color: var(--stone-200) !important; font-size: 14px; }
+  .compare-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Veronica<span>.</span></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#conversations">Real calls</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#cta" class="btn-nav">Book Free Demo</a>
+    </div>
+    <a href="#cta" class="nav-mobile-cta">Book Demo</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- LEFT / TOP: Copy + CTAs -->
+      <div class="hero-cta-col fade-up">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          Never miss another job opportunity
+        </div>
+
+        <h1 class="hero-headline">Your next receptionist never takes a day off.</h1>
+
+        <p class="hero-sub">
+          While you're on the tools, Veronica answers calls, captures leads and books jobs 24/7.
+        </p>
+
+        <div class="hero-cta-stack">
+          <a href="#cta" class="btn-primary">
+            Book Free Demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#calculator" class="btn-outline">Calculate Revenue Loss</a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="trust-item">
+            <span class="trust-num">$340K+</span>
+            <span class="trust-label">Revenue protected<br>per year</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <span class="trust-num">24/7</span>
+            <span class="trust-label">Always on,<br>never sick</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <span class="trust-num">97%</span>
+            <span class="trust-label">Calls answered<br>first ring</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT / BELOW: Business Snapshot Card -->
+      <div class="hero-snapshot-col fade-up" style="transition-delay:0.12s">
+        <div class="snapshot-card">
+          <div class="snapshot-title">
+            <span class="snapshot-title-text">Business Snapshot</span>
+            <span class="snapshot-live">
+              <span class="snapshot-live-dot"></span>
+              Live comparison
+            </span>
+          </div>
+
+          <div class="snapshot-cols">
+            <!-- Current Reality -->
+            <div class="snapshot-col">
+              <div class="snapshot-col-label">Current Reality</div>
+              <div class="snapshot-row">
+                <span>Calls answered</span>
+                <span class="snapshot-row-val">23</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Leads captured</span>
+                <span class="snapshot-row-val">8</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Jobs booked</span>
+                <span class="snapshot-row-val">5</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Monthly rev.</span>
+                <span class="snapshot-row-val">$5,400</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Annual rev.</span>
+                <span class="snapshot-row-val">$64,800</span>
+              </div>
+            </div>
+
+            <!-- With Veronica -->
+            <div class="snapshot-col">
+              <div class="snapshot-col-label with-veronica">With Veronica</div>
+              <div class="snapshot-row">
+                <span>Calls answered</span>
+                <span class="snapshot-row-val green">41</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Leads captured</span>
+                <span class="snapshot-row-val green">15</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Jobs booked</span>
+                <span class="snapshot-row-val green">9</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Monthly rev.</span>
+                <span class="snapshot-row-val gold">$8,900</span>
+              </div>
+              <div class="snapshot-row">
+                <span>Annual rev.</span>
+                <span class="snapshot-row-val gold">$106,800</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result strip -->
+          <div class="snapshot-result">
+            <div class="snapshot-result-nums">
+              <div class="snapshot-result-big">+$3,500 / month</div>
+              <div class="snapshot-result-sub">+$42,000 per year with Veronica</div>
+            </div>
+            <div class="snapshot-result-quote">
+              "Every missed call is a potential job going to another plumber."
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CALCULATOR ══════════════════════════════ -->
+<section id="calculator">
+  <div class="container fade-up">
+    <div class="eyebrow" style="color:rgba(255,255,255,0.5)">The real cost of silence</div>
+    <h2>How much are missed calls <em>actually</em> costing you?</h2>
+    <p class="text-body" style="max-width:520px;margin-top:14px">
+      The average tradie misses 8 calls per week. Each one is a job that went to your competitor. Here's what that adds up to.
+    </p>
+
+    <div class="calc-grid">
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <label>Missed calls per week</label>
+          <div class="calc-slider-wrap">
+            <input type="range" min="1" max="30" value="8" id="calls">
+            <span class="calc-val" id="calls-out">8</span>
+          </div>
+        </div>
+        <div class="calc-field">
+          <label>Average job value (AUD)</label>
+          <div class="calc-slider-wrap">
+            <input type="range" min="100" max="3000" value="650" step="50" id="jobval">
+            <span class="calc-val" id="jobval-out">$650</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-result">
+        <div class="calc-result-label">Revenue lost every year</div>
+        <div class="calc-big" id="annual-loss">$270,400</div>
+        <div class="calc-period">based on your numbers above</div>
+        <div class="calc-breakdown">
+          <div class="calc-row">
+            <span>Missed calls per year</span>
+            <span class="calc-row-val" id="annual-calls">416</span>
+          </div>
+          <div class="calc-row">
+            <span>Revenue walking out the door</span>
+            <span class="calc-row-val" id="annual-loss-small">$270,400</span>
+          </div>
+          <div class="calc-row">
+            <span>Veronica costs per year</span>
+            <span class="calc-row-val">$4,188</span>
+          </div>
+          <div class="calc-row" style="color:rgba(255,255,255,0.8);font-weight:500;padding-top:10px">
+            <span>Your gain with Veronica</span>
+            <span class="calc-row-val" id="net-gain" style="color:#5CB85C">$266,212</span>
+          </div>
+        </div>
+        <div class="calc-cta">
+          <a href="#cta" class="btn-primary btn-white" style="width:100%;margin-top:8px">Stop losing money — get set up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ HOW IT WORKS ══════════════════════════════ -->
+<section id="how">
+  <div class="container fade-up">
+    <div class="eyebrow">Dead simple</div>
+    <h2>Four steps. Zero effort on your part.</h2>
+    <p class="text-body" style="max-width:480px;margin-top:14px">
+      Veronica handles every call from hello to goodbye. You just show up to the job.
+    </p>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <h4>Call comes in</h4>
+          <p>Customer rings your number any time of day or night. Veronica picks up on the first ring — always.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          </div>
+          <h4>Veronica answers</h4>
+          <p>She greets them in your business name, understands the job, captures their details and handles the conversation professionally.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h4>Job gets booked</h4>
+          <p>She checks your live calendar and books the appointment directly — no double-bookings, no callbacks needed.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          </div>
+          <h4>You get notified</h4>
+          <p>You receive a WhatsApp or SMS with the job details. Everything's in your calendar. You just do the work.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ BENEFITS ══════════════════════════════ -->
+<section id="benefits">
+  <div class="container fade-up">
+    <div class="eyebrow">Why tradies choose Veronica</div>
+    <h2>Built for businesses that run on calls.</h2>
+    <p class="text-body" style="max-width:480px;margin-top:14px">
+      You didn't start your business to answer phones. Veronica handles that — so you can stay focused on the work that actually pays.
+    </p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h4>Never lose a job to voicemail</h4>
+        <p>Every call gets answered, every lead gets captured. No more customers hanging up and calling your competitor.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h4>Books jobs at 2am</h4>
+        <p>Half your competitors go to voicemail at 7pm. Veronica doesn't. After-hours calls become booked jobs.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h4>Sounds like your business</h4>
+        <p>Veronica answers in your business name, knows your services and your pricing. Customers think she works for you — because she does.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h4>Pays for itself fast</h4>
+        <p>One extra job per month more than covers the cost. Most clients see ROI within their first week.</p>
+      </div>
+    </div>
+
+    <div class="benefit-quote">
+      <blockquote>"I used to miss 3 or 4 calls a week while I was under a sink. Now Veronica gets them all. I've booked more jobs this month than any month before."</blockquote>
+      <div class="bq-author">
+        <div class="bq-avatar">B</div>
+        <div>
+          <div class="bq-name">Ben Harrington</div>
+          <div class="bq-role">Ben's Plumbing, Sydney</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CONVERSATIONS ══════════════════════════════ -->
+<section id="conversations">
+  <div class="container fade-up">
+    <div class="eyebrow">Hear it yourself</div>
+    <h2>Real conversations. Real jobs booked.</h2>
+    <p class="text-body" style="max-width:480px;margin-top:14px;margin-bottom:36px">
+      This is how Veronica sounds on a call — natural, professional and focused on booking the job.
+    </p>
+
+    <div class="convo-tabs">
+      <button class="convo-tab active" onclick="showConvo(0,this)">Emergency job</button>
+      <button class="convo-tab" onclick="showConvo(1,this)">New customer</button>
+      <button class="convo-tab" onclick="showConvo(2,this)">After hours</button>
+      <button class="convo-tab" onclick="showConvo(3,this)">Price shopper</button>
+    </div>
+
+    <div class="convo-panels">
+
+      <!-- Emergency -->
+      <div class="convo-panel active" id="panel-0">
+        <div class="convo-desc">
+          <h3>Urgent jobs get handled fast.</h3>
+          <p>When someone's in a panic, Veronica stays calm, acts quickly and gets the job in the calendar before they hang up and try someone else.</p>
+          <div class="convo-outcome">
+            <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="outcome-text"><strong>Result:</strong> Electrical emergency booked for 1 PM today. Customer reassured and calm.</div>
+          </div>
+        </div>
+        <div class="convo-thread">
+          <div class="thread-header">
+            <div class="thread-dot"></div>
+            <span class="thread-label">Live call — Wednesday 11:43 AM</span>
+          </div>
+          <div class="msg v"><div class="msg-who">Veronica</div><div class="msg-text">Hi, you've reached Thornton Electrical. This is Veronica — how can I help you today?</div></div>
+          <div class="msg c"><div class="msg-who">Caller</div><div class="msg-text">Hi — sparks are coming out of a power point. I've turned the power off but I'm scared.</div></div>
+          <div class="msg v"><div class="msg-text">You've done exactly the right thing. Let me get someone to you as fast as possible. What's your address?</div></div>
+          <div class="msg c"><div class="msg-text">42 Banksia Drive, Mosman. Can someone come today?</div></div>
+          <div class="msg v"><div class="msg-text">Absolutely. I have Mark available at 1 PM today — does that work?</div></div>
+          <div class="msg c"><div class="msg-text">Yes please, that's perfect.</div></div>
+          <div class="msg v">
+            <div class="msg-booked">
+              <div class="msg-booked-title">✓ Appointment confirmed</div>
+              <div class="msg-booked-detail">Today · 1:00 PM — 42 Banksia Drive, Mosman<br>Mark will call 30 mins before arrival.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New lead -->
+      <div class="convo-panel" id="panel-1">
+        <div class="convo-desc">
+          <h3>Turn first-time callers into loyal customers.</h3>
+          <p>A customer who's never used you before needs to feel confident. Veronica builds that trust from the first word.</p>
+          <div class="convo-outcome">
+            <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="outcome-text"><strong>Result:</strong> New customer booked for Thursday inspection. Contact saved to CRM.</div>
+          </div>
+        </div>
+        <div class="convo-thread">
+          <div class="thread-header">
+            <div class="thread-dot"></div>
+            <span class="thread-label">Live call — Tuesday 3:17 PM</span>
+          </div>
+          <div class="msg v"><div class="msg-who">Veronica</div><div class="msg-text">Hi, you've reached Ben's Plumbing. This is Veronica — how can I help?</div></div>
+          <div class="msg c"><div class="msg-who">Caller</div><div class="msg-text">Hey, I found you on Google. I need a plumber for a slow drain. Are you guys good?</div></div>
+          <div class="msg v"><div class="msg-text">Absolutely — Ben's team has been taking care of Sydney homes for 12 years. A slow drain is usually a quick fix. Would you like to book an inspection this week?</div></div>
+          <div class="msg c"><div class="msg-text">Yeah that'd be great. What are your rates?</div></div>
+          <div class="msg v"><div class="msg-text">Ben will give you a firm quote on-site — no call-out fee for the inspection. We have Thursday morning or Friday afternoon. Which suits you?</div></div>
+          <div class="msg c"><div class="msg-text">Thursday morning is perfect.</div></div>
+          <div class="msg v">
+            <div class="msg-booked">
+              <div class="msg-booked-title">✓ Inspection booked</div>
+              <div class="msg-booked-detail">Thursday · 9:00 AM — New customer captured<br>Contact details saved to CRM.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- After hours -->
+      <div class="convo-panel" id="panel-2">
+        <div class="convo-desc">
+          <h3>Jobs booked while you sleep.</h3>
+          <p>Half your competitors go to voicemail at 7 PM. Veronica doesn't. Every after-hours call is a chance to beat the other guy.</p>
+          <div class="convo-outcome">
+            <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="outcome-text"><strong>Result:</strong> Job locked in at 10:47 PM. Won over 2 competitors who sent to voicemail.</div>
+          </div>
+        </div>
+        <div class="convo-thread">
+          <div class="thread-header">
+            <div class="thread-dot"></div>
+            <span class="thread-label">Live call — Saturday 10:47 PM</span>
+          </div>
+          <div class="msg v"><div class="msg-who">Veronica</div><div class="msg-text">Hi, you've reached Apex Roofing. This is Veronica — how can I help?</div></div>
+          <div class="msg c"><div class="msg-who">Caller</div><div class="msg-text">Oh — I didn't expect anyone to answer. I've got a roof leak and it started raining tonight.</div></div>
+          <div class="msg v"><div class="msg-text">I'm glad you got through! We can get someone out first thing Monday. In the meantime, a bucket under the leak will help. Can I book that in?</div></div>
+          <div class="msg c"><div class="msg-text">Yes please. I tried two other companies and just got voicemail.</div></div>
+          <div class="msg v">
+            <div class="msg-booked">
+              <div class="msg-booked-title">✓ Monday morning booked</div>
+              <div class="msg-booked-detail">Monday · 8:00 AM — Customer called at 10:47 PM<br>Won over 2 competitors who didn't answer.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote request -->
+      <div class="convo-panel" id="panel-3">
+        <div class="convo-desc">
+          <h3>Price-shoppers become paying customers.</h3>
+          <p>Customers comparing quotes are already warm. Veronica captures them before they dial the next number.</p>
+          <div class="convo-outcome">
+            <div class="outcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="outcome-text"><strong>Result:</strong> Quote visit booked Wednesday. Customer stopped calling other tradies.</div>
+          </div>
+        </div>
+        <div class="convo-thread">
+          <div class="thread-header">
+            <div class="thread-dot"></div>
+            <span class="thread-label">Live call — Monday 9:22 AM</span>
+          </div>
+          <div class="msg v"><div class="msg-who">Veronica</div><div class="msg-text">Morning — you've reached Comfort HVAC. I'm Veronica, how can I help you today?</div></div>
+          <div class="msg c"><div class="msg-who">Caller</div><div class="msg-text">I'm looking to get ducted air con installed. How much does it cost?</div></div>
+          <div class="msg v"><div class="msg-text">We're one of the most competitive installers in the area and quotes are always free. The price depends on your home size — could I book a quick 15-minute site visit?</div></div>
+          <div class="msg c"><div class="msg-text">Yeah alright. I'm getting a few quotes so the sooner the better.</div></div>
+          <div class="msg v"><div class="msg-text">We can do Wednesday at 10 AM or Thursday at 2 PM. Which works?</div></div>
+          <div class="msg c"><div class="msg-text">Wednesday is good.</div></div>
+          <div class="msg v">
+            <div class="msg-booked">
+              <div class="msg-booked-title">✓ Quote visit booked</div>
+              <div class="msg-booked-detail">Wednesday · 10:00 AM — Lead captured<br>Customer stopped comparing competitors.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ BEHIND THE SCENES ══════════════════════════════ -->
+<section id="behind">
+  <div class="container">
+    <div class="behind-grid">
+      <div class="fade-up">
+        <div class="eyebrow">Under the bonnet</div>
+        <h2>Smart enough to feel human.</h2>
+        <p class="text-body" style="margin-top:14px;margin-bottom:36px">
+          We won't bore you with the tech. What matters is that Veronica handles everything a great receptionist would — and a few things even the best human can't.
+        </p>
+        <div class="behind-features">
+          <div class="behind-feature active">
+            <div class="bf-num">1</div>
+            <div class="bf-content">
+              <div class="bf-title">Syncs with your calendar live</div>
+              <div class="bf-desc">Veronica reads your real availability in real time. She'll never double-book you or offer a slot you've already filled.</div>
+            </div>
+          </div>
+          <div class="behind-feature">
+            <div class="bf-num">2</div>
+            <div class="bf-content">
+              <div class="bf-title">Captures every lead automatically</div>
+              <div class="bf-desc">Name, phone, address, job type — all saved automatically. Your lead list grows whether you're on the tools or asleep.</div>
+            </div>
+          </div>
+          <div class="behind-feature">
+            <div class="bf-num">3</div>
+            <div class="bf-content">
+              <div class="bf-title">Sends confirmation texts instantly</div>
+              <div class="bf-desc">Customer gets an SMS after the call. Reduces no-shows and keeps your schedule full.</div>
+            </div>
+          </div>
+          <div class="behind-feature">
+            <div class="bf-num">4</div>
+            <div class="bf-content">
+              <div class="bf-title">Learns your business over time</div>
+              <div class="bf-desc">Tell Veronica your pricing, your service area, your team size — she'll answer the common questions so you don't have to.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="behind-visual fade-up" style="transition-delay:0.12s">
+        <div class="cal-mockup">
+          <div class="cal-header">
+            <div class="cal-month">June 2025</div>
+            <div class="cal-nav">
+              <div class="cal-nav-btn">‹</div>
+              <div class="cal-nav-btn">›</div>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-day-label">Mon</div><div class="cal-day-label">Tue</div><div class="cal-day-label">Wed</div>
+            <div class="cal-day-label">Thu</div><div class="cal-day-label">Fri</div><div class="cal-day-label">Sat</div><div class="cal-day-label">Sun</div>
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day">1</div><div class="cal-day">2</div>
+            <div class="cal-day">3</div><div class="cal-day booked-light">4</div><div class="cal-day">5</div>
+            <div class="cal-day booked-light">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div>
+            <div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day today">12</div>
+            <div class="cal-day booked">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div>
+            <div class="cal-day">17</div><div class="cal-day booked-light">18</div><div class="cal-day">19</div>
+            <div class="cal-day">20</div><div class="cal-day booked">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+            <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day booked-light">26</div>
+            <div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+          </div>
+          <div class="cal-legend">
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--stone-900)"></div>Fully booked</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--sage)"></div>Partially booked</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="border:2px solid var(--gold);"></div>Today</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ TESTIMONIALS ══════════════════════════════ -->
+<section id="testimonials" style="background:var(--cream)">
+  <div class="container fade-up">
+    <div class="eyebrow">From the trades</div>
+    <h2>Tradies who stopped missing calls.</h2>
+    <div class="testi-grid">
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">I used to miss 3 or 4 calls a week while I was under a sink. Now Veronica gets them all. Booked more jobs this month than any month before.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">B</div>
+          <div>
+            <div class="testi-name">Ben Harrington</div>
+            <div class="testi-trade">Plumber, Sydney</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Set it up on a Friday afternoon. By Monday morning Veronica had already booked two jobs that came in over the weekend. Paid for itself in 3 days.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <div class="testi-name">Mark Thornton</div>
+            <div class="testi-trade">Electrician, Melbourne</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">My customers think Veronica is a real person on my team. She sounds that good. I've had customers compliment her by name.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">S</div>
+          <div>
+            <div class="testi-name">Sarah Okafor</div>
+            <div class="testi-trade">HVAC, Brisbane</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-big">
+        <div class="testi-big-num">+41%</div>
+        <div class="testi-big-content">
+          <blockquote>"I went from booking 5 jobs a week to 9. Veronica doesn't take sick days, doesn't take lunch, and never puts a customer on hold."</blockquote>
+          <div class="testi-big-author">— Dave Nguyen, Apex Roofing, Perth</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ PRICING ══════════════════════════════ -->
+<section id="pricing">
+  <div class="container fade-up">
+    <div class="eyebrow">Straightforward</div>
+    <h2>Simple, honest pricing.</h2>
+    <p class="text-body" style="max-width:520px;margin-top:14px">
+      One-time setup fee. Month-to-month. No lock-in contracts. Cancel any time.
+    </p>
+
+    <div class="founding-banner">
+      <div class="founding-icon">✦</div>
+      <div><strong>Founding Offer:</strong> The first 3 clients pay only $399 setup instead of $499 — saving $100. Spots are limited. Claim yours now.</div>
+    </div>
+
+    <div class="pricing-grid" style="margin-top:40px">
+
+      <div class="pricing-card">
+        <div class="pricing-name">Essential</div>
+        <div class="pricing-desc">Perfect for sole operators who need calls answered and every lead captured reliably.</div>
+        <div class="pricing-price">
+          <span class="pricing-currency">$</span>
+          <span class="pricing-amount">249</span>
+          <span class="pricing-period">/mo AUD</span>
+        </div>
+        <div class="pricing-setup">+ $499 one-time setup &nbsp;<span class="pricing-setup-offer">(Founding offer: $399)</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>24/7 AI receptionist</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Answers in your business name</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Captures name, suburb &amp; job details</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Real-time leads to Google Sheets</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Dedicated local phone number</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Custom script for your services</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Email support · Live within 24 hrs</li>
+          <li class="pricing-feature-no"><div class="pricing-cross">✕</div>WhatsApp lead alerts</li>
+          <li class="pricing-feature-no"><div class="pricing-cross">✕</div>Google Calendar booking</li>
+        </ul>
+        <a href="#cta" class="btn-outline" style="text-align:center;justify-content:center">Get started</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Best Value</div>
+        <div class="pricing-name">Professional</div>
+        <div class="pricing-desc">For busy tradies who want instant WhatsApp alerts and priority support from day one.</div>
+        <div class="pricing-price">
+          <span class="pricing-currency">$</span>
+          <span class="pricing-amount">349</span>
+          <span class="pricing-period">/mo AUD</span>
+        </div>
+        <div class="pricing-setup" style="color:rgba(255,255,255,0.5)">+ $699 one-time setup</div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Essential</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>WhatsApp alert when a lead comes in</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Lead details sent directly to your phone</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Priority onboarding · Live within 24 hrs</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Direct WhatsApp support line</li>
+        </ul>
+        <a href="#cta" class="btn-primary btn-white" style="text-align:center;justify-content:center">Get started</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-name">Complete</div>
+        <div class="pricing-desc">When you want Veronica to book jobs automatically — zero callbacks, zero double-bookings.</div>
+        <div class="pricing-price">
+          <span class="pricing-currency">$</span>
+          <span class="pricing-amount">449</span>
+          <span class="pricing-period">/mo AUD</span>
+        </div>
+        <div class="pricing-setup">+ $999 one-time setup</div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Professional</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Google Calendar integration</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Veronica books jobs directly</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>SMS confirmation to customer</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>CRM integration</li>
+          <li><div class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Monthly performance report</li>
+        </ul>
+        <a href="#cta" class="btn-outline" style="text-align:center;justify-content:center">Get started</a>
+      </div>
+
+    </div>
+
+    <!-- Comparison table (desktop only) -->
+    <div class="compare-wrap">
+      <div class="compare-title">Full feature comparison</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="compare-fcol"></th>
+            <th>Essential<span>$249/mo</span></th>
+            <th class="compare-hl-h">Professional<span>$349/mo</span></th>
+            <th>Complete<span>$449/mo</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="compare-sec"><td colspan="4">Core reception</td></tr>
+          <tr><td class="compare-fcol">24/7 AI receptionist</td><td class="ct">✓</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">Answers in your business name</td><td class="ct">✓</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">Custom script for your services</td><td class="ct">✓</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">Dedicated local number</td><td class="ct">✓</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr class="compare-sec"><td colspan="4">Lead capture</td></tr>
+          <tr><td class="compare-fcol">Real-time leads to Google Sheets</td><td class="ct">✓</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">WhatsApp lead alerts</td><td class="cx">—</td><td class="compare-hl ct">✓</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">CRM integration</td><td class="cx">—</td><td class="compare-hl cx">—</td><td class="ct">✓</td></tr>
+          <tr class="compare-sec"><td colspan="4">Booking</td></tr>
+          <tr><td class="compare-fcol">Google Calendar booking</td><td class="cx">—</td><td class="compare-hl cx">—</td><td class="ct">✓</td></tr>
+          <tr><td class="compare-fcol">SMS confirmation to customer</td><td class="cx">—</td><td class="compare-hl cx">—</td><td class="ct">✓</td></tr>
+          <tr class="compare-sec"><td colspan="4">Support</td></tr>
+          <tr><td class="compare-fcol">Setup time</td><td>24 hrs</td><td class="compare-hl">24 hrs</td><td>24 hrs</td></tr>
+          <tr><td class="compare-fcol">Support channel</td><td>Email</td><td class="compare-hl">WhatsApp</td><td>WhatsApp</td></tr>
+          <tr><td class="compare-fcol">Monthly report</td><td class="cx">—</td><td class="compare-hl cx">—</td><td class="ct">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FINAL CTA ══════════════════════════════ -->
+<section id="cta">
+  <div class="container fade-up">
+    <h2>Ready to stop missing calls?</h2>
+    <p class="text-body">Book a free 20-minute demo and see exactly how Veronica would sound answering for your business.</p>
+    <div class="cta-btns">
+      <a href="mailto:getveronica.ai@gmail.com?subject=Book%20Free%20Demo%20%E2%80%94%20Veronica&body=Hi%2C%0A%0AI%27m%20interested%20in%20booking%20a%20free%20demo%20for%20Veronica.%0A%0AHere%27s%20a%20bit%20about%20my%20business%3A%0A-%20Business%20name%3A%0A-%20Trade%20%28plumber%2C%20electrician%2C%20HVAC%2C%20etc%29%3A%0A-%20Approx.%20calls%20per%20week%3A%0A%0ALooking%20forward%20to%20hearing%20from%20you%21" class="btn-primary btn-white">
+        Book Free Demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#calculator" class="btn-ghost">Calculate my loss</a>
+    </div>
+    <div class="cta-trust">
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        No lock-in contracts
+      </div>
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Live within 24 hours
+      </div>
+      <div class="cta-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Cancel any time
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Veronica<span>.</span></div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+      <a href="#">Blog</a>
+    </div>
+    <div class="footer-copy">© 2025 Veronica. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  /* ── SCROLL ANIMATIONS ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  /* ── CALCULATOR ── */
+  function updateCalc() {
+    const calls  = parseInt(document.getElementById('calls').value);
+    const jobval = parseInt(document.getElementById('jobval').value);
+
+    document.getElementById('calls-out').textContent  = calls;
+    document.getElementById('jobval-out').textContent = '$' + jobval.toLocaleString();
+
+    const annualCalls = calls * 52;
+    const annualLoss  = annualCalls * jobval;
+    const veronicaCost = 4188;
+    const netGain     = annualLoss - veronicaCost;
+
+    document.getElementById('annual-calls').textContent     = annualCalls.toLocaleString();
+    document.getElementById('annual-loss').textContent      = '$' + annualLoss.toLocaleString();
+    document.getElementById('annual-loss-small').textContent = '$' + annualLoss.toLocaleString();
+    document.getElementById('net-gain').textContent         = '$' + netGain.toLocaleString();
+  }
+  ['calls','jobval'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateCalc);
+  });
+  updateCalc();
+
+  /* ── CONVERSATION TABS ── */
+  function showConvo(idx, btn) {
+    document.querySelectorAll('.convo-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.convo-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + idx).classList.add('active');
+  }
+
+  /* ── BEHIND THE SCENES ── */
+  document.querySelectorAll('.behind-feature').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.behind-feature').forEach(f => f.classList.remove('active'));
+      el.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

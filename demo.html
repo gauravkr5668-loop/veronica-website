@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veronica — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#f5f0e8;--parchment:#ede7d9;--stone:#d6cfc3;--ink:#111008;--ink-mid:#3b3830;--ink-soft:#7a7469;--ink-faint:#b0a99e;--white:#fdfcfa}
+html,body{height:100%;background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif}
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.page::after{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--stone),transparent)}
+
+/* Layout */
+.demo-wrap{display:flex;align-items:flex-start;gap:48px;width:100%;max-width:900px}
+.left{flex:0 0 320px;display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:1rem}
+.right{flex:1;min-width:0}
+
+/* Left side - existing design */
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:2rem}
+.eyebrow-line{width:28px;height:1px;background:var(--stone)}
+.eyebrow span{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:400}
+.logo{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:300;letter-spacing:0.3em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2.5rem}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,4.5rem);font-weight:300;line-height:1.05;color:var(--ink);margin-bottom:1.25rem}
+h1 em{font-style:italic;color:var(--ink-soft)}
+.subtitle{font-size:0.9rem;color:var(--ink-mid);font-weight:300;margin-bottom:3rem;letter-spacing:0.02em}
+.call-btn{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--white);border:1px solid var(--ink);padding:16px 40px;font-size:0.82rem;font-weight:500;font-family:'Outfit',sans-serif;letter-spacing:0.08em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:transform 0.2s ease,background 0.2s ease;outline:none}
+.call-btn:hover{transform:scale(1.03)}
+.call-btn:active{transform:scale(0.97)}
+.call-btn.active{background:transparent;color:var(--ink);border:1px solid var(--stone)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulse 2s infinite;display:none}
+.call-btn.active .live-dot{display:block}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+.status{margin-top:1.5rem;font-size:0.72rem;color:var(--ink-soft);letter-spacing:0.1em;text-transform:uppercase;min-height:1.2em}
+.footer-note{margin-top:2rem;font-size:0.68rem;color:var(--ink-faint);letter-spacing:0.12em;text-transform:uppercase}
+
+/* Right side - transcript panel */
+.transcript-panel{background:var(--white);border:1px solid var(--stone);border-radius:16px;height:480px;display:flex;flex-direction:column;overflow:hidden}
+.transcript-header{padding:16px 20px;border-bottom:1px solid var(--parchment);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.transcript-title{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.transcript-status-dot{width:6px;height:6px;border-radius:50%;background:var(--stone);transition:background 0.3s}
+.transcript-status-dot.live{background:#4ade80;animation:pulse 2s infinite}
+.transcript-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.transcript-body::-webkit-scrollbar{width:3px}
+.transcript-body::-webkit-scrollbar-track{background:transparent}
+.transcript-body::-webkit-scrollbar-thumb{background:var(--stone);border-radius:2px}
+
+/* Empty state */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0.4}
+.empty-icon{width:40px;height:40px;border:1px solid var(--stone);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.empty-icon svg{width:18px;height:18px;stroke:var(--ink-soft);fill:none;stroke-width:1.5}
+.empty-text{font-size:0.78rem;color:var(--ink-soft);letter-spacing:0.06em}
+
+/* Message bubbles */
+.msg{display:flex;flex-direction:column;gap:3px;animation:fadeUp 0.3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);padding:0 4px}
+.msg.veronica .msg-label{color:var(--ink-soft)}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:0.85rem;line-height:1.55;max-width:88%;font-weight:300}
+.msg.veronica .msg-bubble{background:var(--parchment);color:var(--ink);border-bottom-left-radius:3px;align-self:flex-start}
+.msg.user .msg-bubble{background:var(--ink);color:var(--white);border-bottom-right-radius:3px;align-self:flex-end}
+.msg.user{align-items:flex-end}
+.msg.veronica{align-items:flex-start}
+
+/* Typing indicator */
+.typing{display:none;align-items:flex-start;gap:0;flex-direction:column;gap:3px}
+.typing.show{display:flex;animation:fadeUp 0.3s ease}
+.typing-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);padding:0 4px}
+.typing-bubble{background:var(--parchment);padding:12px 16px;border-radius:12px;border-bottom-left-radius:3px;display:flex;gap:4px;align-items:center}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--ink-soft);animation:typing-bounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing-bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* Responsive */
+@media(max-width:700px){
+  .demo-wrap{flex-direction:column;align-items:center}
+  .left{flex:none;width:100%}
+  .right{width:100%}
+  .transcript-panel{height:360px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="demo-wrap">
+
+  <!-- LEFT: call button -->
+  <div class="left">
+    <div class="eyebrow"><div class="eyebrow-line"></div><span>Live Demo · AI Receptionist</span><div class="eyebrow-line"></div></div>
+    <div class="logo">Veronica</div>
+    <h1>Hear her<br/><em>answer.</em></h1>
+    <p class="subtitle">Click below. Veronica picks up in under two seconds.</p>
+    <button class="call-btn" id="callBtn" onclick="handleCall()">
+      <span class="live-dot"></span>
+      <span id="btnText">Call Veronica Now</span>
+    </button>
+    <p class="status" id="status"></p>
+    <p class="footer-note">getveronica.ai</p>
+  </div>
+
+  <!-- RIGHT: live transcript -->
+  <div class="right">
+    <div class="transcript-panel">
+      <div class="transcript-header">
+        <div class="transcript-status-dot" id="transcriptDot"></div>
+        <span class="transcript-title">Live Transcript</span>
+      </div>
+      <div class="transcript-body" id="transcriptBody">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 18.5A6.5 6.5 0 0 1 5.5 12V7a6.5 6.5 0 0 1 13 0v5a6.5 6.5 0 0 1-6.5 6.5z"/><path d="M19 12a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
+          </div>
+          <span class="empty-text">Transcript appears here during the call</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+var vapi=null,callActive=false;
+var transcriptBody=document.getElementById('transcriptBody');
+var emptyState=document.getElementById('emptyState');
+var transcriptDot=document.getElementById('transcriptDot');
+var assistantBuffer=[];
+var bufferTimer=null;
+var vapiIsSpeaking=false;
+
+function flushAssistantBuffer(){
+  if(assistantBuffer.length===0) return;
+  var combined=assistantBuffer.join(' ').trim();
+  assistantBuffer=[];
+  if(!combined) return;
+  if(emptyState) emptyState.style.display='none';
+  var msg=document.createElement('div');
+  msg.className='msg veronica';
+  var label=document.createElement('div');
+  label.className='msg-label';
+  label.textContent='Veronica';
+  var bubble=document.createElement('div');
+  bubble.className='msg-bubble';
+  bubble.textContent=combined;
+  msg.appendChild(label);
+  msg.appendChild(bubble);
+  transcriptBody.appendChild(msg);
+  transcriptBody.scrollTop=transcriptBody.scrollHeight;
+}
+
+function addMessage(role, text){
+  if(!text || !text.trim()) return;
+  if(role==='assistant'){
+    assistantBuffer.push(text.trim());
+    if(bufferTimer) clearTimeout(bufferTimer);
+    bufferTimer=setTimeout(flushAssistantBuffer, 1500);
+  } else {
+    flushAssistantBuffer();
+    if(emptyState) emptyState.style.display='none';
+    var msg=document.createElement('div');
+    msg.className='msg user';
+    var label=document.createElement('div');
+    label.className='msg-label';
+    label.textContent='Caller';
+    var bubble=document.createElement('div');
+    bubble.className='msg-bubble';
+    bubble.textContent=text;
+    msg.appendChild(label);
+    msg.appendChild(bubble);
+    transcriptBody.appendChild(msg);
+    transcriptBody.scrollTop=transcriptBody.scrollHeight;
+  }
+}
+
+function showTyping(){
+  if(vapiIsSpeaking) return;
+  var t=document.getElementById('typingIndicator');
+  if(!t){
+    t=document.createElement('div');
+    t.className='typing show';
+    t.id='typingIndicator';
+    t.innerHTML='<div class="typing-label">Veronica</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    transcriptBody.appendChild(t);
+    transcriptBody.scrollTop=transcriptBody.scrollHeight;
+  }
+}
+
+function hideTyping(){
+  var t=document.getElementById('typingIndicator');
+  if(t) t.remove();
+}
+
+(function(d,t){
+  var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src='https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
+  g.defer=true;g.async=true;s.parentNode.insertBefore(g,s);
+  g.onload=function(){
+    vapi=window.vapiSDK.run({apiKey:'427dc07e-55be-450c-9d08-de52f47d98d5',assistant:'8cebdd26-3879-4b05-8f8d-e9367a7fa9df',config:{hideButton:true}});
+
+    vapi.on('call-start',function(){
+      callActive=true;
+      vapiIsSpeaking=false;
+      document.getElementById('callBtn').classList.add('active');
+      document.getElementById('btnText').textContent='End Call';
+      document.getElementById('status').textContent='Connected — Veronica is live';
+      transcriptDot.classList.add('live');
+      if(emptyState) emptyState.style.display='none';
+    });
+
+    vapi.on('call-end',function(){
+      callActive=false;
+      vapiIsSpeaking=false;
+      flushAssistantBuffer();
+      hideTyping();
+      document.getElementById('callBtn').classList.remove('active');
+      document.getElementById('btnText').textContent='Call Veronica Now';
+      document.getElementById('status').textContent='Call ended';
+      transcriptDot.classList.remove('live');
+      setTimeout(function(){document.getElementById('status').textContent='';},3000);
+    });
+
+    vapi.on('speech-start',function(){
+      vapiIsSpeaking=true;
+      hideTyping();
+    });
+
+    vapi.on('speech-end',function(){
+      vapiIsSpeaking=false;
+    });
+
+    vapi.on('message',function(msg){
+      if(msg.type==='transcript' && msg.transcriptType==='final'){
+        hideTyping();
+        addMessage(msg.role, msg.transcript);
+        if(msg.role==='user' && callActive && !vapiIsSpeaking){
+          setTimeout(showTyping, 300);
+        }
+      }
+    });
+
+    vapi.on('error',function(){
+      document.getElementById('status').textContent='Something went wrong — try again';
+      document.getElementById('callBtn').classList.remove('active');
+      document.getElementById('btnText').textContent='Call Veronica Now';
+      transcriptDot.classList.remove('live');
+      callActive=false;
+      vapiIsSpeaking=false;
+    });
+  };
+  g.onerror=function(){document.getElementById('status').textContent='Connection error — refresh and try again';};
+})(document,'script');
+
+function handleCall(){
+  if(!vapi){document.getElementById('status').textContent='Loading — try again in a moment';return;}
+  if(callActive){vapi.stop();}
+  else{
+    document.getElementById('status').textContent='Connecting...';
+    assistantBuffer=[];
+    vapiIsSpeaking=false;
+    transcriptBody.innerHTML='';
+    var empty=document.createElement('div');
+    empty.className='empty-state';
+    empty.id='emptyState';
+    empty.innerHTML='<div class="empty-icon"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--ink-soft);fill:none;stroke-width:1.5"><path d="M12 18.5A6.5 6.5 0 0 1 5.5 12V7a6.5 6.5 0 0 1 13 0v5a6.5 6.5 0 0 1-6.5 6.5z"/><path d="M19 12a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="9" y1="22" x2="15" y2="22"/></svg></div><span class="empty-text">Transcript appears here during the call</span>';
+    transcriptBody.appendChild(empty);
+    emptyState=document.getElementById('emptyState');
+    vapi.start('8cebdd26-3879-4b05-8f8d-e9367a7fa9df');
+  }
+}
+</script>
+</body>
+</html>
